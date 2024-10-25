@@ -8,7 +8,7 @@
 </head>
 
 <body>
-    <h1>Welcome to the Shop</h1>
+    <h1>Welcome to the Shop sign up page</h1>
     <!-- Navigation Buttons -->
     <div class="options">
         <h2>User Actions:</h2>

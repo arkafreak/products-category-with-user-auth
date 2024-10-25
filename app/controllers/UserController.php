@@ -1,11 +1,14 @@
 <?php
+session_start();
 class UserController extends Controller
 {
     private $userModel;
 
     public function __construct()
     {
+
         $this->userModel = $this->model('UserModel'); // Ensure UserModel exists
+        // No need to call session_start() here, as it should be done in bootstrap.php
     }
 
     public function register()
@@ -30,40 +33,45 @@ class UserController extends Controller
 
     public function login()
     {
-        // Load the login view
-        $this->view('user/login');
-    }
-
-    public function authenticate()
-    {
+        // Check if the request method is POST
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            
-            $email = trim($_POST['email']);
-            $password = trim($_POST['password']);
+            $_USER = filter_input_array(INPUT_POST);
+            $data = [
+                'email' => trim($_USER['email']),
+                'password' => trim($_USER['password'])
+            ];
 
-            $user = $this->userModel->getUserByEmail($email);
-           // var_dump($user);
+            // Fetch user by email
+            $user = $this->userModel->getUserByEmail($data['email']);
+
             if ($user) {
                 // Check password
-                if (password_verify($password, $user->password)) { // Use $user->password if you fetch it as an object
-                    session_start();
-                    $_SESSION['user_id'] = $user->id; // Assuming you're fetching user as an object
-                    $this->view('/choose/options');
-                    exit();
+                if (password_verify($data['password'], $user->password)) {
+                    // Store user ID in session
+                    $_SESSION['user_id'] = $user->id;
+
+                    // Redirect to options page
+                    header("Location: " . URLROOT . "/choice/options");
+                    exit(); // Always exit after redirect
                 } else {
-                    echo "Invalid email or password"; // Debug message
+                    echo "Invalid email or password"; // Debug message for invalid password
                 }
             } else {
-                //die("User not found"); // Debug message
+                echo "User not found"; // Debug message for non-existing user
             }
+        } else {
+            // Load the login view
+            $data = ['email' => '', 'password' => ''];
+            $this->view('user/login', $data);
         }
     }
 
 
+
     public function logout()
     {
-        session_start();
+        unset($_SESSION["user_id"]);
         session_destroy();
-        header("Location: " . URLROOT . "/login");
+        header("Location: " . URLROOT . "/login"); // Redirect to login after logout
     }
 }

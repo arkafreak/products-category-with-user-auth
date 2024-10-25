@@ -1,12 +1,15 @@
 <?php
-class UserModel {
+class UserModel
+{
     private $db;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->db = new Database(); // Assuming Database class is correctly set up
     }
 
-    public function insertUser($name, $email, $password) {
+    public function insertUser($name, $email, $password)
+    {
         try {
             $sql = "INSERT INTO users (name, email, password) VALUES (:name, :email, :password)";
             $this->db->query($sql);
@@ -23,11 +26,12 @@ class UserModel {
         }
     }
 
-    public function getUserByEmail($email) {
-        $sql = "SELECT * FROM users WHERE email = :email";
-        $this->db->query($sql);
+    public function getUserByEmail($email)
+    {
+        $this->db->query("SELECT * FROM users WHERE email = :email");
         $this->db->bind(':email', $email);
-        return $this->db->single();
+        $result = $this->db->single(); // Fetch a single record
+
+        return $result; // This should return an object or an associative array
     }
 }
-?>

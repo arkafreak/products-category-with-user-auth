@@ -5,14 +5,16 @@ class Products extends Controller
 
     public function __construct()
     {
-        // Start the session
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
 
         // Check if user is logged in
-        // if (!isset($_SESSION['user_id'])) {
-        //     header("Location: " . URLROOT . "/login"); // Redirect to login if not authenticated
-        //     exit();
-        // }
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: " . URLROOT . "/user/login"); // Redirect to login if not authenticated
+            exit();
+        }
+
         // Initialize the Product model
         $this->productModel = $this->model('Product');
     }

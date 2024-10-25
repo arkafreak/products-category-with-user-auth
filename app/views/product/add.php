@@ -24,7 +24,7 @@
         <!-- Cant add a new product now as the table in the sql database has a new column
          called weight which is yet to be implemented in the code!!! -->
         <label for="weight">Weight:</label>
-        <input type="number" name="weight" required><br>
+        <input type="dicimal" name="weight" required><br>
         <span>Enter "0" for Digital products</span>
         <br>
 

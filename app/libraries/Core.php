@@ -1,9 +1,4 @@
-<?php
-/* App Core Class
- * Creates URL & Loads core controller
- * URL FORMAT - /controller/method/params
- */
-
+<?php 
 class Core
 {
     protected $currentController = 'Pages'; // Default controller
@@ -14,8 +9,8 @@ class Core
     {
         $url = $this->getUrl();
 
-        // Check if the controller exists
-        if (file_exists('../app/controllers/' . ucwords($url[0]) . '.php')) {
+        // Check if the URL has a controller
+        if (!empty($url) && file_exists('../app/controllers/' . ucwords($url[0]) . '.php')) {
             $this->currentController = ucwords($url[0]);
             unset($url[0]); // Remove controller from URL
         }
@@ -25,18 +20,16 @@ class Core
         $this->currentController = new $this->currentController;
 
         // Check if the method exists in the controller
-        if (isset($url[1])) {
-            if (method_exists($this->currentController, $url[1])) {
-                $this->currentMethod = $url[1];
-                unset($url[1]); // Remove method from URL
-            }
+        if (isset($url[1]) && method_exists($this->currentController, $url[1])) {
+            $this->currentMethod = $url[1];
+            unset($url[1]); // Remove method from URL
         }
 
         // Get the parameters after controller and method
         $this->params = $url ? array_values($url) : [];
 
         // Call the method with parameters, if any
-        call_user_func_array([$this->currentController, $this->currentMethod],   $this->params);
+        call_user_func_array([$this->currentController, $this->currentMethod], $this->params);
     }
 
     public function getUrl()

@@ -1,13 +1,28 @@
 <?php
-class Categories extends Controller {
+class Categories extends Controller
+{
     private $categoryModel;
 
-    public function __construct() {
+    public function __construct()
+    {
+        // Initialize the Category model
+        // Start the session to access session variables
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
+        // Check if user is logged in
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: " . URLROOT . "/UserController/login"); // Redirect to login if not authenticated
+            exit();
+        }
+
         // Initialize the Category model
         $this->categoryModel = $this->model('Category');
     }
 
-    public function index() {
+    public function index()
+    {
         // Retrieve all categories
         $categories = $this->categoryModel->getAllCategories();
         $data = [
@@ -16,7 +31,8 @@ class Categories extends Controller {
         $this->view('category/index', $data); // Ensure the correct view path
     }
 
-    public function add() {
+    public function add()
+    {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Sanitize and filter input
             $_CATEGORY = filter_input_array(INPUT_POST);
@@ -33,8 +49,9 @@ class Categories extends Controller {
             $this->view('category/add', $data); // Corrected to 'categories/add'
         }
     }
-    
-    public function show($id) {
+
+    public function show($id)
+    {
         // Retrieve a single category by ID
         $category = $this->categoryModel->getCategoryById($id);
         $data = [
@@ -42,8 +59,9 @@ class Categories extends Controller {
         ];
         $this->view('category/show', $data); // Corrected to 'categories/show'
     }
-    
-    public function edit($id) {
+
+    public function edit($id)
+    {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Sanitize and filter input
             $_CATEGORY = filter_input_array(INPUT_POST);
@@ -64,12 +82,12 @@ class Categories extends Controller {
             $this->view('category/edit', $data); // Corrected to 'categories/edit'
         }
     }
-    
-    public function delete($id) {
+
+    public function delete($id)
+    {
         // Call the delete method in the model
         $this->categoryModel->delete($id);
         header('Location: ' . URLROOT . '/categories');
         exit; // Always exit after redirect
     }
 }
-?>
