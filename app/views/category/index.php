@@ -17,16 +17,16 @@
 
     <table border="1">
         <tr>
-            <th>Category ID</th>
-            <th>Category Name</th>
-            <th>Actions</th>
+            <th style="text-align: center;">Category ID</th>
+            <th style="text-align: center;">Category Name</th>
+            <th style="text-align: center;">Actions</th>
         </tr>
         <?php if (!empty($data['categories'])): ?>
             <?php foreach ($data['categories'] as $category): ?>
                 <tr>
                     <td style="text-align: center;"><?php echo htmlspecialchars($category->id); ?></td>
                     <td style="text-align: center;"><?php echo htmlspecialchars($category->categoryName); ?></td>
-                    <td style="text-align: center;">
+                    <td style="text-align: center;">&nbsp;
                         <a href="<?php echo URLROOT; ?>/categories/edit/<?php echo htmlspecialchars($category->id); ?>" style="text-decoration:none;"><button>Edit</button></a>&nbsp;
                         <a href="<?php echo URLROOT; ?>/categories/delete/<?php echo htmlspecialchars($category->id); ?>" style="text-decoration:none;" onclick="return confirm('Are you sure you want to delete this category?');"><button>Delete</button></a>&nbsp;
                         <a href="<?php echo URLROOT; ?>/categories/show/<?php echo htmlspecialchars($category->id); ?>" style="text-decoration:none;"><button>View</button></a>&nbsp;
