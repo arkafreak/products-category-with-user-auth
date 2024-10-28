@@ -10,7 +10,11 @@
 
 <body>
     <h1>Products</h1>
-    <a href="<?php echo URLROOT; ?>/products/add"><button>Add New Product</button></a>&nbsp;
+    
+    <?php if ($_SESSION['role'] === 'admin'): ?>
+        <a href="<?php echo URLROOT; ?>/products/add"><button>Add New Product</button></a>&nbsp;
+    <?php endif; ?>
+    
     <a href="<?php echo URLROOT; ?>/categories"><button>Go to categories</button></a>&nbsp;
     <a href="<?php echo URLROOT; ?>/choose/options"><button>Home</button></a><br>&nbsp;
     <br>
@@ -33,8 +37,10 @@
                     <td style="text-align: center;"><?php echo htmlspecialchars($product->originalPrice); ?></td>
                     <td style="text-align: center;"><?php echo htmlspecialchars($product->sellingPrice); ?></td>
                     <td style="text-align: center;">&nbsp;
-                        <a href="<?php echo URLROOT; ?>/products/edit/<?php echo htmlspecialchars($product->id); ?>" style="text-decoration:none;"><button>Edit</button></a>&nbsp;
-                        <a href="<?php echo URLROOT; ?>/products/delete/<?php echo htmlspecialchars($product->id); ?>" style="text-decoration:none;" onclick="return confirm('Are you sure you want to delete this product?');"><button>Delete</button></a>&nbsp;
+                        <?php if ($_SESSION['role'] === 'admin'): ?>
+                            <a href="<?php echo URLROOT; ?>/products/edit/<?php echo htmlspecialchars($product->id); ?>" style="text-decoration:none;"><button>Edit</button></a>&nbsp;
+                            <a href="<?php echo URLROOT; ?>/products/delete/<?php echo htmlspecialchars($product->id); ?>" style="text-decoration:none;" onclick="return confirm('Are you sure you want to delete this product?');"><button>Delete</button></a>&nbsp;
+                        <?php endif; ?>
                         <a href="<?php echo URLROOT; ?>/products/show/<?php echo htmlspecialchars($product->id); ?>" style="text-decoration:none;"><button>View</button></a>&nbsp;
                     </td>
                 </tr>

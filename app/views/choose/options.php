@@ -5,10 +5,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Page</title>
+    <style>
+        .message {
+            color: green;
+            font-size: 1.2em;
+            margin: 20px 0;
+        }
+    </style>
 </head>
 
 <body>
     <h1>Welcome to the Shop</h1>
+
+    <!-- Login Success Message -->
+    <?php if (!empty($_SESSION['loginMessage'])): ?>
+        <p class="message" id="loginMessage"><?php echo $_SESSION['loginMessage']; ?></p>
+        <?php unset($_SESSION['loginMessage']); ?>
+    <?php endif; ?>
+
     <!-- Navigation Buttons -->
     <div class="options">
         <h2>Choose:</h2>
@@ -21,6 +35,13 @@
         <button type="submit">Logout</button>
     </form>
 
+    <script>
+        // Hide the login message after 3 seconds
+        setTimeout(() => {
+            const message = document.getElementById('loginMessage');
+            if (message) message.style.display = 'none';
+        }, 3000);
+    </script>
 </body>
 
 </html>
