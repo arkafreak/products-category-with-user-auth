@@ -41,7 +41,7 @@ if (!isset($_SESSION['role'])) {
     </div>
 
     <!-- Logout button -->
-    <form action="<?php echo URLROOT; ?>" method="POST" style="margin-top: 20px;">
+    <form action="<?php echo URLROOT; ?>/UserController/logout" method="POST" style="margin-top: 20px;">
         <button type="submit">Logout</button>
     </form>
 

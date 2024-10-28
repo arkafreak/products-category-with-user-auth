@@ -109,6 +109,7 @@ class UserController extends Controller
 
         // Redirect to index
         header("Location: " . URLROOT . "/index");
-        // exit(); // Always exit after redirect
+        // Always exit after redirect
+        exit();
     }
 }
