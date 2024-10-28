@@ -18,7 +18,7 @@ class UserController extends Controller
             'email' => '',
             'password' => '',
             'successMessage' => '',
-            'role' =>'',
+            'role' => '',
             'errorMessage' => ''
         ];
 
@@ -47,11 +47,17 @@ class UserController extends Controller
 
     public function login()
     {
+        // Redirect to options page if user is already logged in
+        // if (isset($_SESSION['user_id'])) {
+        //     header("Location: " . URLROOT . "/choice/options"); // Redirect to the desired page
+        //     exit(); // Always exit after redirect
+        // }
+
         // Initialize data with default values
         $data = [
             'email' => '',
             'password' => '',
-            'role'=>'',
+            'role' => '',
             'loginError' => ''
         ];
 
@@ -93,14 +99,17 @@ class UserController extends Controller
 
     public function logout()
     {
+        // Set a session variable to show a logout success message
+        $_SESSION['logoutMessage'] = "Logout successful!"; // Set message before destroying the session
+
+        // Remove user ID from session
         unset($_SESSION["user_id"]);
+
+        // Destroy the session
         session_destroy();
 
-        // Set a session variable to show a logout success message
-        //session_start(); // Start session again to set the message
-        $_SESSION['logoutMessage'] = "Logout successful!";
-
+        // Redirect to index
         header("Location: " . URLROOT . "/index");
-        exit();
+        exit(); // Always exit after redirect
     }
 }

@@ -1,3 +1,13 @@
+<?php
+
+// Check if the user is logged in
+if (!isset($_SESSION['role'])) {
+    // Redirect to login if not logged in
+    header('Location: ' . URLROOT . '/login');
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 

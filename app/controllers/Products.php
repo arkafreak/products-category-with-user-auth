@@ -5,10 +5,6 @@ class Products extends Controller
 
     public function __construct()
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
         // Check if user is logged in
         if (!isset($_SESSION['user_id'])) {
             header("Location: " . URLROOT . "/user/login"); // Redirect to login if not authenticated
@@ -31,6 +27,12 @@ class Products extends Controller
 
     public function add()
     {
+        // Only allow access for admin role
+        if ($_SESSION['role'] !== 'admin') {
+            header("Location: " . URLROOT . "/products");
+            exit();
+        }
+
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Sanitize and filter input
             $_PRODUCT = filter_input_array(INPUT_POST);
@@ -68,6 +70,12 @@ class Products extends Controller
 
     public function edit($id)
     {
+        // Only allow access for admin role
+        if ($_SESSION['role'] !== 'admin') {
+            header("Location: " . URLROOT . "/products");
+            exit();
+        }
+
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Sanitize and filter input
             $_PRODUCT = filter_input_array(INPUT_POST);
@@ -99,6 +107,12 @@ class Products extends Controller
 
     public function delete($id)
     {
+        // Only allow access for admin role
+        if ($_SESSION['role'] !== 'admin') {
+            header("Location: " . URLROOT . "/products");
+            exit();
+        }
+
         // Call the delete method in the model
         $this->productModel->delete($id);
         header('Location: ' . URLROOT . '/products');
