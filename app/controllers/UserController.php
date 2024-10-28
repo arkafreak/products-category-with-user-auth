@@ -1,5 +1,4 @@
 <?php
-//session_start();
 class UserController extends Controller
 {
     private $userModel;
@@ -78,6 +77,8 @@ class UserController extends Controller
                     $_SESSION['user_id'] = $user->id;
                     $_SESSION['role'] = $user->role;
                     // Set login success message
+// echo $_SESSION['user_id'];
+// echo $_SESSION['role'];
                     $_SESSION['loginMessage'] = "Login successful!";
 
                     // Redirect to options page
@@ -104,6 +105,7 @@ class UserController extends Controller
 
         // Remove user ID from session
         unset($_SESSION["user_id"]);
+        unset($_SESSION["role"]);
 
         // Destroy the session
         session_destroy();

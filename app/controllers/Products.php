@@ -6,6 +6,7 @@ class Products extends Controller
     public function __construct()
     {
         // Check if user is logged in
+        //echo isset($_SESSION['user_id']);
         if (!isset($_SESSION['user_id'])) {
             header("Location: " . URLROOT . "/UserController/login"); // Redirect to login if not authenticated
             exit();
