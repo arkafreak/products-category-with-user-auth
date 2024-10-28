@@ -7,7 +7,7 @@ class Products extends Controller
     {
         // Check if user is logged in
         if (!isset($_SESSION['user_id'])) {
-            header("Location: " . URLROOT . "/user/login"); // Redirect to login if not authenticated
+            header("Location: " . URLROOT . "/UserController/login"); // Redirect to login if not authenticated
             exit();
         }
 
