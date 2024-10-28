@@ -10,13 +10,19 @@
 
 <body>
     <h1>Products</h1>
-    
+
     <?php if ($_SESSION['role'] === 'admin'): ?>
         <a href="<?php echo URLROOT; ?>/products/add"><button>Add New Product</button></a>&nbsp;
     <?php endif; ?>
-    
+
     <a href="<?php echo URLROOT; ?>/categories"><button>Go to categories</button></a>&nbsp;
     <a href="<?php echo URLROOT; ?>/choose/options"><button>Home</button></a><br>&nbsp;
+
+    <!-- Logout button made here -->
+
+    <form action="<?php echo URLROOT; ?>/UserController/logout" method="POST">
+        <button type="submit">Logout</button>
+    </form>
     <br>
 
     <table border="1">

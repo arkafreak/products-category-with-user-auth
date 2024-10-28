@@ -108,7 +108,7 @@ class UserController extends Controller
         session_destroy();
 
         // Redirect to index
-        header("Location: " . URLROOT . "/index");
+        header("Location: " . URLROOT . "");
         // Always exit after redirect
         exit();
     }

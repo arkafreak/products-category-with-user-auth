@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,5 +29,14 @@
         <a href="<?php echo URLROOT; ?>/UserController/login"><button>Login</button></a>
     </div>
 
+    <script>
+        // Hide the logout message after 3 seconds
+        setTimeout(() => {
+            const message = document.getElementById('logoutMessage');
+            if (message) message.style.display = 'none';
+        }, 3000);
+    </script>
+
 </body>
+
 </html>

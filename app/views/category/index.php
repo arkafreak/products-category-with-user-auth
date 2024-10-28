@@ -10,15 +10,21 @@
 
 <body>
     <h1>Categories</h1>
-    
     <?php if ($_SESSION['role'] === 'admin'): ?>
         <a href="<?php echo URLROOT; ?>/categories/add"><button>Add New Category</button></a>&nbsp;
     <?php endif; ?>
-    
+
     <a href="<?php echo URLROOT; ?>/products"><button>Go to products</button></a>&nbsp;
     <a href="<?php echo URLROOT; ?>/choose/options"><button>Home</button></a><br>&nbsp;
-    <br>
+    
+    
+    <!-- Logout button made here -->
 
+
+    <form action="<?php echo URLROOT; ?>/UserController/logout" method="POST">
+        <button type="submit">Logout</button>
+    </form>
+    <br>
     <table border="1">
         <tr>
             <th style="text-align: center;">Category ID</th>
