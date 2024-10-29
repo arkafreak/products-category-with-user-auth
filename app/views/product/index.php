@@ -219,7 +219,7 @@
                         <a href="<?php echo URLROOT; ?>/products/show/<?php echo htmlspecialchars($product->id); ?>" style="text-decoration:none;"><button>View</button></a>&nbsp;
                         <?php if ($_SESSION['role'] === 'customer'): ?>
                             <a href="<?php echo URLROOT; ?>/cart/add/<?php echo htmlspecialchars($product->id); ?>">
-                                <button>Add to Cart</button>
+                                <button>Add</button>
                             <?php endif; ?>
                             </a>
                     </td>
