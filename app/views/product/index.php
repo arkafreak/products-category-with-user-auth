@@ -59,7 +59,7 @@
     </table>
     <br>
     <a href="<?php echo URLROOT; ?>/digital"><button>Digital Products</button></a>&nbsp;
-    <a href="<?php echo URLROOT ?>/products/physicalIndex/<?php echo htmlspecialchars($product->id); ?>" style="text-decoration:none;"><button>Physical Product</button></a>
+    <a href="<?php echo URLROOT; ?>/physical"><button>Physical Products</button></a>&nbsp;
 </body>
 
 </html>
