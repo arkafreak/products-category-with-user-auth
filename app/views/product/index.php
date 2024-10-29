@@ -6,7 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Products</title>
     <link rel="stylesheet" href="../../public/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        /* Cart Icon Styling */
+        .cart-icon {
+            margin-left: 700px;
+        }
+
+        .cart-icon a {
+            display: inline-block;
+            padding: 10px;
+            background-color: #007bff;
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .cart-icon a:hover {
+            background-color: #0056b3;
+        }
+
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
@@ -121,9 +141,20 @@
 
         /* Responsive design */
         @media (max-width: 600px) {
+            .button-container {
+                flex-direction: column;
+                align-items: flex-start;
+                /* Align items to the left */
+            }
+
+            .cart-icon {
+                margin-bottom: 10px;
+                /* Space below cart icon */
+            }
+
             button {
                 width: 100%;
-                /* Full width on smaller screens */
+                /* Full width buttons on small screens */
                 margin-bottom: 10px;
                 /* Space below buttons */
             }
@@ -147,6 +178,13 @@
             <a href="<?php echo URLROOT; ?>/categories"><button>Go to categories</button></a>
             <a href="<?php echo URLROOT; ?>/choose/options"><button>Home</button></a>
         </div>
+
+        <!-- Cart icon and Logout button aligned to the right -->
+        <?php if ($_SESSION['role'] === 'customer'): ?>
+            <div class="cart-icon">
+                <a href="<?php echo URLROOT; ?>/cart"><i class="fa fa-shopping-cart"></i></a>
+            </div>
+        <?php endif; ?>
 
         <!-- Logout button aligned to the right -->
         <form action="<?php echo URLROOT; ?>/UserController/logout" method="POST">
@@ -179,6 +217,11 @@
                             <a href="<?php echo URLROOT; ?>/products/delete/<?php echo htmlspecialchars($product->id); ?>" style="text-decoration:none;" onclick="return confirm('Are you sure you want to delete this product?');"><button>Delete</button></a>&nbsp;
                         <?php endif; ?>
                         <a href="<?php echo URLROOT; ?>/products/show/<?php echo htmlspecialchars($product->id); ?>" style="text-decoration:none;"><button>View</button></a>&nbsp;
+                        <?php if ($_SESSION['role'] === 'customer'): ?>
+                            <a href="<?php echo URLROOT; ?>/cart/add/<?php echo htmlspecialchars($product->id); ?>">
+                                <button>Add to Cart</button>
+                            <?php endif; ?>
+                            </a>
                     </td>
                 </tr>
             <?php endforeach; ?>

@@ -5,8 +5,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Categories</title>
-    <link rel="stylesheet" href="/path/to/your/style.css"> <!-- Adjust path to your CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        /* Cart Icon Styling */
+        .cart-icon {
+            margin-left: 600px;
+        }
+
+        .cart-icon a {
+            display: inline-block;
+            padding: 10px;
+            background-color: #007bff;
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .cart-icon a:hover {
+            background-color: #0056b3;
+        }
+
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
@@ -41,6 +60,7 @@
             background-color: #c82333 !important;
             /* Darker red on hover */
         }
+
         a[href*="delete"] button {
             background-color: #dc3545;
             /* Red color */
