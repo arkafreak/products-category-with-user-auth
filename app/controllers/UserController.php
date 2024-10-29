@@ -74,6 +74,7 @@ class UserController extends Controller
                 // Check password
                 if (password_verify($data['password'], $user->password)) {
                     // Store user ID in session
+                    $_SESSION['name'] = $user->name;
                     $_SESSION['user_id'] = $user->id;
                     $_SESSION['role'] = $user->role;
                     // Set login success message

@@ -32,9 +32,7 @@ class UserModel
         $this->db->query("SELECT * FROM users WHERE email = :email AND role = :role");
         $this->db->bind(':email', $email);
         $this->db->bind(':role', $role);
-        $result = $this->db->single(); // Fetch a single record
-        
-
-        return $result; // This should return an object or an associative array
+        return $this->db->single(); // Fetch a single record
+        // This should return an object or an associative array
     }
 }

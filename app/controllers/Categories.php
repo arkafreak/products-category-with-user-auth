@@ -2,6 +2,7 @@
 class Categories extends Controller
 {
     private $categoryModel;
+    private $productModel;
 
     public function __construct()
     {
@@ -10,7 +11,7 @@ class Categories extends Controller
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
-        
+
         // Check if user is logged in
         if (!isset($_SESSION['user_id'])) {
             header("Location: " . URLROOT . "/UserController/login"); // Redirect to login if not authenticated
@@ -19,6 +20,7 @@ class Categories extends Controller
 
         // Initialize the Category model
         $this->categoryModel = $this->model('Category');
+        $this->productModel = $this->model('Product');
     }
 
     public function index()
@@ -54,8 +56,10 @@ class Categories extends Controller
     {
         // Retrieve a single category by ID
         $category = $this->categoryModel->getCategoryById($id);
+        $products = $this->productModel->getProductsByCategoryId($id);
         $data = [
-            'category' => $category
+            'category' => $category,
+            'products' => $products
         ];
         $this->view('category/show', $data); // Corrected to 'categories/show'
     }

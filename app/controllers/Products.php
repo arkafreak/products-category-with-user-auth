@@ -2,6 +2,7 @@
 class Products extends Controller
 {
     private $productModel;
+    private $categoryModel;
 
     public function __construct()
     {
@@ -13,6 +14,7 @@ class Products extends Controller
 
         // Initialize the Product model
         $this->productModel = $this->model('Product');
+        $this->categoryModel = $this->model('Category');
     }
 
     public function index()
@@ -41,18 +43,22 @@ class Products extends Controller
                 'brand' => trim($_PRODUCT['brand']),
                 'originalPrice' => trim($_PRODUCT['originalPrice']),
                 'sellingPrice' => trim($_PRODUCT['sellingPrice']),
-                'weight' => trim($_PRODUCT['weight']) // Added weight field
+                'weight' => trim($_PRODUCT['weight']), // Added weight field
+                'categoryId' => trim($_PRODUCT['categoryId'])
             ];
             $this->productModel->add($data); // Call the correct model method
             header('Location: ' . URLROOT . '/products');
             exit; // Always exit after redirect
         } else {
+            $categories = $this->categoryModel->getAllCategories(); // Get all categories
             $data = [
                 'productName' => '',
                 'brand' => '',
                 'originalPrice' => '',
                 'sellingPrice' => '',
-                'weight' => '' // Added weight field
+                'weight' => '', // Added weight field
+                'categoryId' => '',
+                'categories' => $categories
             ];
             $this->view('product/add', $data); // Corrected to 'product/add'
         }
@@ -85,7 +91,8 @@ class Products extends Controller
                 'brand' => trim($_PRODUCT['brand']),
                 'originalPrice' => trim($_PRODUCT['originalPrice']),
                 'sellingPrice' => trim($_PRODUCT['sellingPrice']),
-                'weight' => trim($_PRODUCT['weight']) // Added weight field
+                'weight' => trim($_PRODUCT['weight']), // Added weight field
+                'categoryId' => trim($_PRODUCT['categoryId'])
             ];
             $this->productModel->edit($data); // Call the correct model method
             header('Location: ' . URLROOT . '/products');
@@ -93,13 +100,17 @@ class Products extends Controller
         } else {
             // Retrieve product for editing
             $product = $this->productModel->getProductById($id);
+            $categories = $this->categoryModel->getAllCategories();
+
             $data = [
                 'id' => $id,
                 'productName' => $product->productName,
                 'brand' => $product->brand,
                 'originalPrice' => $product->originalPrice,
                 'sellingPrice' => $product->sellingPrice,
-                'weight' => $product->weight // Added weight field for editing
+                'weight' => $product->weight, // Added weight field for editing
+                'categoryId'=> $product->categoryId,
+                'categories' => $categories
             ];
             $this->view('product/edit', $data); // Corrected to 'product/edit'
         }
