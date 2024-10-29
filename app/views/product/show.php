@@ -18,8 +18,9 @@
         }
 
         .button-container {
-            text-align: center; /* Center align buttons */
-            margin-bottom: 20px; /* Space below button container */
+            display: flex; /* Use flexbox for layout */
+            justify-content: flex-start; /* Align items to the left */
+            margin-top: 20px; /* Space above the button container */
         }
 
         .button-container a {
@@ -27,14 +28,13 @@
         }
 
         button {
-            padding: 10px 10px; /* Adjust padding for buttons */
+            padding: 10px 20px; /* Adjust padding for buttons */
             background-color: #28a745; /* Green color for buttons */
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer; /* Pointer cursor on hover */
             font-size: 16px; /* Increase font size */
-            margin: 0 10px; /* Margin between buttons */
         }
 
         button:hover {
@@ -44,7 +44,7 @@
         table {
             width: 100%; /* Full width */
             border-collapse: collapse; /* Remove space between borders */
-            margin-top: 10px; /* Space above the table */
+            margin-top: 20px; /* Space above the table */
         }
 
         th, td {
@@ -80,7 +80,6 @@
 </head>
 <body>
     <h1>View Product</h1>
-    <a href="<?php echo URLROOT; ?>/products"><button>Go Back</button></a>
 
     <table border="1">
         <tr>
@@ -100,5 +99,9 @@
             <td><?php echo htmlspecialchars($data['products']->categoryName); ?></td>
         </tr>
     </table>
+
+    <div class="button-container">
+        <a href="<?php echo URLROOT; ?>/products"><button>Go Back</button></a>
+    </div>
 </body>
 </html>

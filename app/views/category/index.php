@@ -10,71 +10,129 @@
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
-            background-color: #f9f9f9; /* Light background for better contrast */
+            background-color: #f9f9f9;
+            /* Light background for better contrast */
         }
 
         h1 {
             text-align: center;
-            color: #333; /* Darker text for heading */
+            color: #333;
+            /* Darker text for heading */
         }
 
         .button-container {
-            text-align: center; /* Center align buttons */
-            margin-bottom: 20px; /* Space below button container */
+            display: flex;
+            /* Use flexbox for layout */
+            justify-content: space-between;
+            /* Space between buttons */
+            align-items: center;
+            /* Align items vertically */
+            margin-bottom: 20px;
+            /* Space below button container */
+        }
+
+        .button-container form button[type="submit"] {
+            background-color: #dc3545 !important;
+            /* Red color */
+            color: white !important;
+        }
+
+        .button-container form button[type="submit"]:hover {
+            background-color: #c82333 !important;
+            /* Darker red on hover */
+        }
+        a[href*="delete"] button {
+            background-color: #dc3545;
+            /* Red color */
+            color: white;
+            border: none;
+        }
+
+        a[href*="delete"] button:hover {
+            background-color: #c82333;
+            /* Darker red on hover */
+        }
+
+        .button-group {
+            display: flex;
+            /* Group buttons together */
+            align-items: center;
+            /* Center align buttons vertically */
         }
 
         .button-container a {
-            text-decoration: none; /* Remove underline from links */
+            text-decoration: none;
+            /* Remove underline from links */
         }
 
         button {
-            padding: 10px 10px; /* Adjust padding for buttons */
-            background-color: #28a745; /* Green color for buttons */
+            padding: 10px 10px;
+            /* Adjust padding for buttons */
+            background-color: #28a745;
+            /* Green color for buttons */
             color: white;
             border: none;
             border-radius: 5px;
-            cursor: pointer; /* Pointer cursor on hover */
-            font-size: 16px; /* Increase font size */
-            margin: 0 10px; /* Margin between buttons */
+            cursor: pointer;
+            /* Pointer cursor on hover */
+            font-size: 16px;
+            /* Increase font size */
+            margin: 0 10px;
+            /* Margin between buttons */
         }
 
         button:hover {
-            background-color: #218838; /* Darker green on hover */
+            background-color: #218838;
+            /* Darker green on hover */
         }
 
         table {
-            width: 100%; /* Full width */
-            border-collapse: collapse; /* Remove space between borders */
-            margin-top: 10px; /* Space above the table */
+            width: 100%;
+            /* Full width */
+            border-collapse: collapse;
+            /* Remove space between borders */
+            margin-top: 10px;
+            /* Space above the table */
         }
 
-        th, td {
-            padding: 5px; /* Padding for cells */
-            text-align: center; /* Center align text in cells */
-            border: 1px solid #ccc; /* Border for cells */
+        th,
+        td {
+            padding: 5px;
+            /* Padding for cells */
+            text-align: center;
+            /* Center align text in cells */
+            border: 1px solid #ccc;
+            /* Border for cells */
         }
 
         th {
-            background-color: #f2f2f2; /* Light gray background for headers */
-            color: #333; /* Darker text for headers */
+            background-color: #f2f2f2;
+            /* Light gray background for headers */
+            color: #333;
+            /* Darker text for headers */
         }
 
         .warning {
             font-weight: bold;
             color: red;
-            margin-bottom: 20px; /* Space below warning */
-            text-align: center; /* Center align warning text */
+            margin-bottom: 20px;
+            /* Space below warning */
+            text-align: center;
+            /* Center align warning text */
         }
 
         /* Responsive design */
         @media (max-width: 600px) {
             button {
-                width: 100%; /* Full width on smaller screens */
-                margin-bottom: 10px; /* Space below buttons */
+                width: 100%;
+                /* Full width on smaller screens */
+                margin-bottom: 10px;
+                /* Space below buttons */
             }
 
             table {
-                font-size: 14px; /* Smaller font size for smaller screens */
+                font-size: 14px;
+                /* Smaller font size for smaller screens */
             }
         }
     </style>
@@ -82,21 +140,23 @@
 
 <body>
     <h1>Categories</h1>
-    <?php if ($_SESSION['role'] === 'admin'): ?>
-        <a href="<?php echo URLROOT; ?>/categories/add"><button>Add New Category</button></a>&nbsp;
-    <?php endif; ?>
 
-    <a href="<?php echo URLROOT; ?>/products"><button>Go to products</button></a>&nbsp;
-    <a href="<?php echo URLROOT; ?>/choose/options"><button>Home</button></a><br>&nbsp;
-    
-    
-    <!-- Logout button made here -->
+    <div class="button-container">
+        <div class="button-group">
+            <?php if ($_SESSION['role'] === 'admin'): ?>
+                <a href="<?php echo URLROOT; ?>/categories/add"><button>Add New Category</button></a>&nbsp;
+            <?php endif; ?>
 
+            <a href="<?php echo URLROOT; ?>/products"><button>Go to products</button></a>&nbsp;
+            <a href="<?php echo URLROOT; ?>/choose/options"><button>Home</button></a>
+        </div>
 
-    <form action="<?php echo URLROOT; ?>/UserController/logout" method="POST">
-        <button type="submit">Logout</button>
-    </form>
-    <br>
+        <!-- Logout button aligned to the right -->
+        <form action="<?php echo URLROOT; ?>/UserController/logout" method="POST">
+            <button type="submit">Logout</button>
+        </form>
+    </div>
+
     <table border="1">
         <tr>
             <th style="text-align: center;">Category ID</th>

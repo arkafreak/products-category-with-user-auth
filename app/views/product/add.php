@@ -7,9 +7,17 @@
     <title>Add Product</title>
     <link rel="stylesheet" href="/style.css"> <!-- Adjust path to your CSS -->
     <style>
+        h1 {
+            text-align: center;
+            margin: 0;
+            /* Remove margin to align with the button */
+        }
+
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
+            position: relative;
+            /* Allows absolute positioning of the button */
         }
 
         form {
@@ -69,19 +77,21 @@
             margin-bottom: 20px;
             /* Space below warning */
         }
-    </style>
-    <script>
-        function updateCategoryId() {
-            var select = document.getElementById("categoryId");
-            var selectedValue = select.options[select.selectedIndex].value;
-            document.getElementById("categoryIdValue").value = selectedValue;
+
+        /* Style the button container */
+        .button-container {
+            display: flex;
+            justify-content: flex-start;
+            margin-top: 1px;
+            /* Reduce this value to lift the button up */
         }
-    </script>
+    </style>
 </head>
 
 <body>
     <h1>ADD PRODUCT</h1>
-    <form action="<?php echo URLROOT; ?>/products/add" method="post">&nbsp;
+
+    <form action="<?php echo URLROOT; ?>/products/add" method="post">
         <label for="productName">Product Name:</label>
         <input type="text" name="productName" required>
 
@@ -94,15 +104,11 @@
         <label for="sellingPrice">Selling Price:</label>
         <input type="number" name="sellingPrice" required>
 
-        <!-- Cant add a new product now as the table in the sql database has a new column
-         called weight which is yet to be implemented in the code!!! -->
         <label for="weight">Weight:</label>
         <input type="decimal" name="weight" required>
         <span style="font-weight: bold; color: red;">Enter "0" for Digital products</span>
 
-        <!-- <input type="hidden" name="categoryId" id="categoryIdValue" required> -->
-
-        <label for="categoryId">Category:</label>&nbsp;
+        <label for="categoryId">Category:</label>
         <select name="categoryId" id="categoryId" required>
             <?php foreach ($data['categories'] as $category): ?>
                 <option value="<?php echo htmlspecialchars($category->id); ?>"
@@ -110,12 +116,14 @@
                     <?php echo htmlspecialchars($category->categoryName); ?>
                 </option>
             <?php endforeach; ?>
-        </select><br><br>&nbsp;
+        </select>
 
         <input type="submit" value="Add Product">
     </form>
-    &nbsp;
-    <a href="<?php echo URLROOT; ?>/products"><button>Go Back</button></a>
+
+    <div class="button-container">
+        <a href="<?php echo URLROOT; ?>/products"><button>Go Back</button></a>
+    </div>
 </body>
 
 </html>

@@ -9,78 +9,76 @@
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
-            background-color: #f9f9f9; /* Light background for better contrast */
+            background-color: #f9f9f9;
         }
 
         h1 {
             text-align: center;
-            color: #333; /* Darker text for heading */
+            color: #333;
         }
 
         .button-container {
-            text-align: center; /* Center align buttons */
-            margin-bottom: 20px; /* Space below button container */
+            display: flex;
+            justify-content: flex-start; /* Align button to the left */
+            margin-top: 20px; /* Space above the button container */
         }
 
         .button-container a {
-            text-decoration: none; /* Remove underline from links */
+            text-decoration: none;
         }
 
         button {
-            padding: 10px 10px; /* Adjust padding for buttons */
-            background-color: #28a745; /* Green color for buttons */
+            padding: 10px 20px;
+            background-color: #28a745;
             color: white;
             border: none;
             border-radius: 5px;
-            cursor: pointer; /* Pointer cursor on hover */
-            font-size: 16px; /* Increase font size */
-            margin: 0 10px; /* Margin between buttons */
+            cursor: pointer;
+            font-size: 16px;
         }
 
         button:hover {
-            background-color: #218838; /* Darker green on hover */
+            background-color: #218838;
         }
 
         table {
-            width: 100%; /* Full width */
-            border-collapse: collapse; /* Remove space between borders */
-            margin-top: 10px; /* Space above the table */
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
         }
 
         th, td {
-            padding: 5px; /* Padding for cells */
-            text-align: center; /* Center align text in cells */
-            border: 1px solid #ccc; /* Border for cells */
+            padding: 5px;
+            text-align: center;
+            border: 1px solid #ccc;
         }
 
         th {
-            background-color: #f2f2f2; /* Light gray background for headers */
-            color: #333; /* Darker text for headers */
+            background-color: #f2f2f2;
+            color: #333;
         }
 
         .warning {
             font-weight: bold;
             color: red;
-            margin-bottom: 20px; /* Space below warning */
-            text-align: center; /* Center align warning text */
+            margin-bottom: 20px;
+            text-align: center;
         }
 
-        /* Responsive design */
         @media (max-width: 600px) {
             button {
-                width: 100%; /* Full width on smaller screens */
-                margin-bottom: 10px; /* Space below buttons */
+                width: 100%;
+                margin-bottom: 10px;
             }
 
             table {
-                font-size: 14px; /* Smaller font size for smaller screens */
+                font-size: 14px;
             }
         }
     </style>
 </head>
 <body>
-    <h1>Category: <?php echo htmlspecialchars($data['category']->categoryName); ?></h1> <!-- Display the category name -->
-    <a href="<?php echo URLROOT; ?>/categories"><button>Go Back</button></a>
+    <h1>Category: <?php echo htmlspecialchars($data['category']->categoryName); ?></h1>
 
     <h2>Products under this Category:</h2>
     <table border="1">
@@ -99,5 +97,10 @@
             </tr>
         <?php endif; ?>
     </table>
+
+    <!-- Go Back button positioned below the table -->
+    <div class="button-container">
+        <a href="<?php echo URLROOT; ?>/categories"><button>Go Back</button></a>
+    </div>
 </body>
 </html>

@@ -75,6 +75,18 @@ $userName = isset($_SESSION['name']) ? htmlspecialchars($_SESSION['name']) : 'Us
             /* Darker green on hover */
         }
 
+        form button[type="submit"] {
+            background-color: #dc3545;
+            /* Red color for logout button */
+            color: white;
+            border: none;
+        }
+
+        form button[type="submit"]:hover {
+            background-color: #c82333;
+            /* Darker red on hover */
+        }
+
         /* Responsive design */
         @media (max-width: 600px) {
             button {

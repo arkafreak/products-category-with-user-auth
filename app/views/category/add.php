@@ -6,6 +6,9 @@
     <title>Add Category</title>
     <link rel="stylesheet" href="/path/to/your/style.css"> <!-- Adjust path to your CSS -->
     <style>
+        h1{
+            text-align: center;
+        }
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
