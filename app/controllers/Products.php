@@ -6,13 +6,13 @@ class Products extends Controller
 
     public function __construct()
     {
-        // Start session and check if user is logged in
-        Helper::startSession();
-        if (!Helper::isLoggedIn()) {
-            Helper::redirect(URLROOT . "/UserController/login"); // Redirect to login if not authenticated
+        // Check if user is logged in
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: " . URLROOT . "/UserController/login"); // Redirect to login if not authenticated
+            exit();
         }
 
-        // Initialize the Product and Category models
+        // Initialize the Product model
         $this->productModel = $this->model('Product');
         $this->categoryModel = $this->model('Category');
     }
@@ -22,33 +22,45 @@ class Products extends Controller
         // Retrieve all products
         $products = $this->productModel->getAllProducts();
         $data = [
-            'products' => $products
+            'products' => $products // Corrected variable name to match the view
         ];
-        $this->view('product/index', $data);
+        $this->view('product/index', $data); // Ensure the correct view path
     }
 
     public function add()
     {
         // Only allow access for admin role
-        if (!Helper::isAdmin()) {
-            Helper::redirect(URLROOT . "/products");
+        if ($_SESSION['role'] !== 'admin') {
+            header("Location: " . URLROOT . "/products");
+            exit();
         }
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Sanitize and filter input
             $_PRODUCT = filter_input_array(INPUT_POST);
-            $data = [];
-            foreach (Helper::getProductFields() as $field) {
-                $data[$field] = Helper::sanitizeInput($_PRODUCT[$field] ?? '');
-            }
-
-            $this->productModel->add($data);
-            Helper::flashMessage('Product added successfully.');
-            Helper::redirect(URLROOT . '/products');
+            $data = [
+                'productName' => trim($_PRODUCT['productName']),
+                'brand' => trim($_PRODUCT['brand']),
+                'originalPrice' => trim($_PRODUCT['originalPrice']),
+                'sellingPrice' => trim($_PRODUCT['sellingPrice']),
+                'weight' => trim($_PRODUCT['weight']), // Added weight field
+                'categoryId' => trim($_PRODUCT['categoryId'])
+            ];
+            $this->productModel->add($data); // Call the correct model method
+            header('Location: ' . URLROOT . '/products');
+            exit; // Always exit after redirect
         } else {
-            $categories = $this->categoryModel->getAllCategories();
-            $data = array_merge(array_fill_keys(Helper::getProductFields(), ''), ['categories' => $categories]);
-            $this->view('product/add', $data);
+            $categories = $this->categoryModel->getAllCategories(); // Get all categories
+            $data = [
+                'productName' => '',
+                'brand' => '',
+                'originalPrice' => '',
+                'sellingPrice' => '',
+                'weight' => '', // Added weight field
+                'categoryId' => '',
+                'categories' => $categories
+            ];
+            $this->view('product/add', $data); // Corrected to 'product/add'
         }
     }
 
@@ -57,61 +69,75 @@ class Products extends Controller
         // Retrieve a single product by ID
         $product = $this->productModel->getProductById($id);
 
+        // Check if the product exists
         if (!$product) {
+            // Handle the case where the product is not found (e.g., redirect or show an error message)
             Helper::flashMessage('Product not found.', 'error');
             Helper::redirect(URLROOT . '/products');
             return;
         }
 
+        // Pass the product to the view
         $data = [
-            'product' => $product
+            'products' => $product // Use 'product' instead of 'products' for clarity
         ];
         $this->view('product/show', $data);
     }
 
+
     public function edit($id)
     {
         // Only allow access for admin role
-        if (!Helper::isAdmin()) {
-            Helper::redirect(URLROOT . "/products");
+        if ($_SESSION['role'] !== 'admin') {
+            header("Location: " . URLROOT . "/products");
+            exit();
         }
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            // Sanitize and filter input
             $_PRODUCT = filter_input_array(INPUT_POST);
-            $data = ['id' => $id];
-            foreach (Helper::getProductFields() as $field) {
-                $data[$field] = Helper::sanitizeInput($_PRODUCT[$field] ?? '');
-            }
-
-            $this->productModel->edit($data);
-            Helper::flashMessage('Product updated successfully.');
-            Helper::redirect(URLROOT . '/products');
+            $data = [
+                'id' => $id,
+                'productName' => trim($_PRODUCT['productName']),
+                'brand' => trim($_PRODUCT['brand']),
+                'originalPrice' => trim($_PRODUCT['originalPrice']),
+                'sellingPrice' => trim($_PRODUCT['sellingPrice']),
+                'weight' => trim($_PRODUCT['weight']), // Added weight field
+                'categoryId' => trim($_PRODUCT['categoryId'])
+            ];
+            $this->productModel->edit($data); // Call the correct model method
+            header('Location: ' . URLROOT . '/products');
+            exit; // Always exit after redirect
         } else {
+            // Retrieve product for editing
             $product = $this->productModel->getProductById($id);
             $categories = $this->categoryModel->getAllCategories();
 
-            if ($product) {
-                $data = ['id' => $id, 'categories' => $categories];
-                foreach (Helper::getProductFields() as $field) {
-                    $data[$field] = $product->$field ?? '';
-                }
-                $this->view('product/edit', $data);
-            } else {
-                Helper::flashMessage('Product not found.', 'error');
-                Helper::redirect(URLROOT . '/products');
-            }
+            $data = [
+                'id' => $id,
+                'productName' => $product->productName,
+                'brand' => $product->brand,
+                'originalPrice' => $product->originalPrice,
+                'sellingPrice' => $product->sellingPrice,
+                'weight' => $product->weight, // Added weight field for editing
+                'categoryId' => $product->categoryId,
+                'categories' => $categories
+            ];
+            $this->view('product/edit', $data); // Corrected to 'product/edit'
         }
     }
 
     public function delete($id)
     {
         // Only allow access for admin role
-        if (!Helper::isAdmin()) {
-            Helper::redirect(URLROOT . "/products");
+        if ($_SESSION['role'] !== 'admin') {
+            header("Location: " . URLROOT . "/products");
+            exit();
         }
 
+        // Call the delete method in the model
         $this->productModel->delete($id);
-        Helper::flashMessage('Product deleted successfully.');
-        Helper::redirect(URLROOT . '/products');
+        header('Location: ' . URLROOT . '/products');
+        exit; // Always exit after redirect
     }
 }
