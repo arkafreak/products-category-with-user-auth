@@ -53,6 +53,23 @@ class Helper
         header("Location: " . $url);
         exit();
     }
+    //for Show function in the productsController
+    public static function formatProductDetails($product)
+    {
+        if (!$product) {
+            return null;
+        }
+
+        return [
+            'productName' => $product->productName,
+            'brand' => $product->brand,
+            'originalPrice' => $product->originalPrice,
+            'sellingPrice' => $product->sellingPrice,
+            'weight' => $product->weight,
+            'categoryName' => $product->categoryName
+        ];
+    }
+
 
     //function for storing all the column names in an array
     public static function getProductFields()
