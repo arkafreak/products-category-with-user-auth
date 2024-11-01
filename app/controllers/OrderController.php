@@ -40,9 +40,24 @@ class OrderController extends Controller
     }
     public function addressPayment()
     {
-        // Display the address and payment view
-        $this->view('order/address_payment');
+        $userId = $_SESSION['user_id'];
+        $cartItems = $this->cartModel->getCartItems($userId);
+
+        // Calculate total amount
+        $totalAmount = 0;
+        foreach ($cartItems as $item) {
+            $totalAmount += $item->sellingPrice * $item->quantity;
+        }
+
+        // Pass the cart items and total amount to the view
+        $data = [
+            'cartItems' => $cartItems,
+            'totalAmount' => $totalAmount
+        ];
+
+        $this->view('order/address_payment', $data);
     }
+
 
     public function confirm()
     {

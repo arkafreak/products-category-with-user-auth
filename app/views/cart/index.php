@@ -156,7 +156,7 @@
         <h3>Total Amount: <?php echo htmlspecialchars($totalAmount); ?></h3>
         <br>
         <div class="place-order-container">
-            <form action="<?php echo URLROOT; ?>/OrderController/placeOrder" method="POST">
+            <form action="<?php echo URLROOT; ?>/OrderController/addressPayment" method="POST">
                 <button type="submit" class="btn btn-primary">Place Order</button>
             </form>
         </div>
