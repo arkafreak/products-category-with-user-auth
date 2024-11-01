@@ -88,7 +88,17 @@
             justify-content: center;
             height: 100vh;
         }
+
+        /* New style for the Place Order button container */
+        .place-order-container {
+            display: flex;
+            justify-content: center;
+            /* Center the button horizontally */
+            margin-top: 20px;
+            /* Add some gap from the table */
+        }
     </style>
+
 </head>
 
 <body>
@@ -136,12 +146,20 @@
                                 <input type="hidden" name="action" value="remove">
                                 <button type="submit">remove</button>
                             </form>
+
                         </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
+
         <h3>Total Amount: <?php echo htmlspecialchars($totalAmount); ?></h3>
+        <br>
+        <div class="place-order-container">
+            <form action="<?php echo URLROOT; ?>/OrderController/placeOrder" method="POST">
+                <button type="submit" class="btn btn-primary">Place Order</button>
+            </form>
+        </div>
         <br>
         <a href="<?php echo URLROOT; ?>/products"><button>Back to Products</button></a>
     <?php else: ?>
