@@ -68,11 +68,22 @@ class Products extends Controller
     {
         // Retrieve a single product by ID
         $product = $this->productModel->getProductById($id);
+
+        // Check if the product exists
+        if (!$product) {
+            // Handle the case where the product is not found (e.g., redirect or show an error message)
+            Helper::flashMessage('Product not found.', 'error');
+            Helper::redirect(URLROOT . '/products');
+            return;
+        }
+
+        // Pass the product to the view
         $data = [
-            'products' => $product
+            'products' => $product // Use 'product' instead of 'products' for clarity
         ];
-        $this->view('product/show', $data); // Corrected to 'product/view'
+        $this->view('product/show', $data);
     }
+
 
     public function edit($id)
     {
@@ -109,7 +120,7 @@ class Products extends Controller
                 'originalPrice' => $product->originalPrice,
                 'sellingPrice' => $product->sellingPrice,
                 'weight' => $product->weight, // Added weight field for editing
-                'categoryId'=> $product->categoryId,
+                'categoryId' => $product->categoryId,
                 'categories' => $categories
             ];
             $this->view('product/edit', $data); // Corrected to 'product/edit'

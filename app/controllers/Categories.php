@@ -6,19 +6,15 @@ class Categories extends Controller
 
     public function __construct()
     {
-        // Initialize the Category model
-        // Start the session to access session variables
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
+        // Start the session
+        Helper::startSession();
 
         // Check if user is logged in
-        if (!isset($_SESSION['user_id'])) {
-            header("Location: " . URLROOT . "/UserController/login"); // Redirect to login if not authenticated
-            exit();
+        if (!Helper::isLoggedIn()) {
+            Helper::redirect(URLROOT . "/UserController/login"); // Redirect to login if not authenticated
         }
 
-        // Initialize the Category model
+        // Initialize the Category and Product models
         $this->categoryModel = $this->model('Category');
         $this->productModel = $this->model('Product');
     }
@@ -27,28 +23,22 @@ class Categories extends Controller
     {
         // Retrieve all categories
         $categories = $this->categoryModel->getAllCategories();
-        $data = [
-            'categories' => $categories // Corrected variable name to match the view
-        ];
-        $this->view('category/index', $data); // Ensure the correct view path
+        $data = ['categories' => $categories];
+        $this->view('category/index', $data);
     }
 
     public function add()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            // Sanitize and filter input
-            $_CATEGORY = filter_input_array(INPUT_POST);
             $data = [
-                'categoryName' => trim($_CATEGORY['categoryName'])
+                'categoryName' => Helper::sanitizeInput($_POST['categoryName'])
             ];
-            $this->categoryModel->add($data); // Call the correct model method
-            header('Location: ' . URLROOT . '/categories');
-            exit; // Always exit after redirect
+            $this->categoryModel->add($data);
+            Helper::flashMessage('Category added successfully.'); // Add flash message
+            Helper::redirect(URLROOT . '/categories');
         } else {
-            $data = [
-                'categoryName' => '' // Empty field for new category
-            ];
-            $this->view('category/add', $data); // Corrected to 'categories/add'
+            $data = ['categoryName' => ''];
+            $this->view('category/add', $data);
         }
     }
 
@@ -61,21 +51,20 @@ class Categories extends Controller
             'category' => $category,
             'products' => $products
         ];
-        $this->view('category/show', $data); // Corrected to 'categories/show'
+        $this->view('category/show', $data); // View for displaying category details
     }
 
     public function edit($id)
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Sanitize and filter input
-            $_CATEGORY = filter_input_array(INPUT_POST);
             $data = [
                 'id' => $id,
-                'categoryName' => trim($_CATEGORY['categoryName'])
+                'categoryName' => Helper::sanitizeInput($_POST['categoryName'])
             ];
             $this->categoryModel->edit($data); // Call the correct model method
-            header('Location: ' . URLROOT . '/categories');
-            exit; // Always exit after redirect
+            Helper::flashMessage('Category updated successfully.'); // Add flash message
+            Helper::redirect(URLROOT . '/categories');
         } else {
             // Retrieve category for editing
             $category = $this->categoryModel->getCategoryById($id);
@@ -89,9 +78,8 @@ class Categories extends Controller
 
     public function delete($id)
     {
-        // Call the delete method in the model
         $this->categoryModel->delete($id);
-        header('Location: ' . URLROOT . '/categories');
-        exit; // Always exit after redirect
+        Helper::flashMessage('Category deleted successfully.'); // Add flash message
+        Helper::redirect(URLROOT . '/categories');
     }
 }

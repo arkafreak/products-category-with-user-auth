@@ -1,44 +1,42 @@
 <?php
-class Category {
+class Category
+{
     private $db;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->db = new Database;
     }
 
     // Get all categories
-    public function getAllCategories() {
-        $this->db->query('SELECT * FROM categories');
-        return $this->db->resultSet();
+    public function getAllCategories()
+    {
+        return $this->db->select('categories'); // Select all categories
     }
 
     // Add a new category
-    public function add($data) {
-        $this->db->query('INSERT INTO categories (categoryName) VALUES (:categoryName)');
-        $this->db->bind(':categoryName', $data['categoryName']);
-        return $this->db->execute(); // Return true on success
+    public function add($data)
+    {
+        return $this->db->insert('categories', ['categoryName' => $data['categoryName']]); // Insert new category
     }
 
     // Get a category by ID
-    public function getCategoryById($id) {
+    public function getCategoryById($id)
+    {
         $this->db->query('SELECT * FROM categories WHERE id = :id');
         $this->db->bind(':id', $id);
-        return $this->db->single();
+        return $this->db->single(); // This should return a single object, not an array
     }
 
     // Edit a category
-    public function edit($data) {
-        $this->db->query('UPDATE categories SET categoryName = :categoryName WHERE id = :id');
-        $this->db->bind(':id', $data['id']);
-        $this->db->bind(':categoryName', $data['categoryName']);
-        return $this->db->execute(); // Return true on success
+    public function edit($data)
+    {
+        return $this->db->update('categories', ['categoryName' => $data['categoryName']], 'id = ' . (int)$data['id']); // Update category
     }
 
     // Delete a category
-    public function delete($id) {
-        $this->db->query('DELETE FROM categories WHERE id = :id');
-        $this->db->bind(':id', $id);
-        return $this->db->execute(); // Return true on success
+    public function delete($id)
+    {
+        return $this->db->delete('categories', 'id = ' . (int)$id); // Delete category by ID
     }
 }
-?>

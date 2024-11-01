@@ -9,79 +9,51 @@ class Product
     }
 
     // Get all products
-    // public function getAllProducts()
-    // {
-    //     $this->db->query('SELECT * FROM products');
-    //     return $this->db->resultSet();
-    // }
-
     public function getAllProducts()
     {
-        $this->db->query("
-        SELECT products.*, categories.categoryName
-        FROM products
-        LEFT JOIN categories ON products.categoryId = categories.id
-        ");
-        return $this->db->resultSet(); // This should return all products with their category names
+        return $this->db->select('products p LEFT JOIN categories c ON p.categoryId = c.id', 'p.*, c.categoryName');
     }
 
     // Add a new product
     public function add($data)
     {
-        $this->db->query('INSERT INTO products (productName, brand, originalPrice, sellingPrice, weight, categoryId) VALUES (:productName, :brand, :originalPrice, :sellingPrice, :weight, :categoryId)');
-        $this->db->bind(':productName', $data['productName']);
-        $this->db->bind(':brand', $data['brand']);
-        $this->db->bind(':originalPrice', $data['originalPrice']);
-        $this->db->bind(':sellingPrice', $data['sellingPrice']);
-        $this->db->bind(':weight', $data['weight']); // Bind the weight directly
-        $this->db->bind(':categoryId', $data['categoryId']);
-        return $this->db->execute(); // Return true on success
+        return $this->db->insert('products', $data);
     }
 
     // Get a product by ID
     public function getProductById($id)
     {
-        $sql = "
-        SELECT products.*, categories.categoryName
-        FROM products
-        JOIN categories ON products.categoryId = categories.id
-        WHERE products.id = :id
-        ";
-        $this->db->query($sql);
-        $this->db->bind(':id', $id);
-        return $this->db->single();
+        $result = $this->db->select(
+            'products p LEFT JOIN categories c ON p.categoryId = c.id',
+            'p.*, c.categoryName',
+            'p.id = ' . (int)$id // Using direct integer conversion
+        );
+
+        // Return the first result (assuming it returns an array of results)
+        return isset($result[0]) ? $result[0] : null; // Return null if no product is found
     }
+
 
     // Edit a product
     public function edit($data)
     {
-
-        $data['weight'] = isset($data['weight']) && !empty($data['weight']) ? $data['weight'] : 0;
-
-        $this->db->query('UPDATE products SET productName = :productName, brand = :brand, originalPrice = :originalPrice, sellingPrice = :sellingPrice, weight = :weight, categoryId = :categoryId WHERE id = :id');
-        $this->db->bind(':id', $data['id']);
-        $this->db->bind(':productName', $data['productName']);
-        $this->db->bind(':brand', $data['brand']);
-        $this->db->bind(':originalPrice', $data['originalPrice']);
-        $this->db->bind(':sellingPrice', $data['sellingPrice']);
-        $this->db->bind(':weight', $data['weight']); // Bind the weight directly
-        $this->db->bind(':categoryId', $data['categoryId']);
-        return $this->db->execute(); // Return true on success
+        $where = 'id = ' . (int)$data['id']; // Ensure id is safely cast to an integer
+        return $this->db->update('products', $data, $where);
     }
 
     // Delete a product
     public function delete($id)
     {
-        $this->db->query('DELETE FROM products WHERE id = :id');
-        $this->db->bind(':id', $id);
-        return $this->db->execute(); // Return true on success
+        return $this->db->delete('products', 'id = ' . (int)$id); // Directly using integer
     }
 
     // Get products by category ID
     public function getProductsByCategoryId($categoryId)
     {
-        $this->db->query("SELECT * FROM products WHERE categoryId = :categoryId");
-        $this->db->bind(':categoryId', $categoryId);
-        return $this->db->resultSet(); // Fetch multiple rows
+        return $this->db->select(
+            'products',
+            '*',
+            'categoryId = ' . (int)$categoryId // Using direct integer conversion
+        );
     }
 }
