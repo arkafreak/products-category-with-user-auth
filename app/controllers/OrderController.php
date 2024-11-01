@@ -20,7 +20,7 @@ class OrderController extends Controller
     {
         $userId = $_SESSION['user_id'];
         $cartItems = $this->cartModel->getCartItems($userId);
-        
+
         // Calculate total amount
         $totalAmount = 0;
         foreach ($cartItems as $item) {
@@ -36,6 +36,50 @@ class OrderController extends Controller
             Helper::flashMessage("Failed to place order.", "error");
         }
 
-        Helper::redirect(URLROOT . '/cart');
+        Helper::redirect(URLROOT . '/CartController');
+    }
+    public function addressPayment()
+    {
+        // Display the address and payment view
+        $this->view('order/address_payment');
+    }
+
+    public function confirm()
+    {
+        // Ensure the user is logged in
+        if (!Helper::isLoggedIn()) {
+            Helper::redirect(URLROOT . '/UserController/login');
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            // Get the address and payment method from the form
+            $address = Helper::sanitizeInput($_POST['address']);
+            $paymentMethod = Helper::sanitizeInput($_POST['paymentMethod']);
+
+            // Prepare order data including address and payment method
+            $orderData = [
+                'userId' => $_SESSION['order']['userId'],
+                'totalAmount' => $_SESSION['order']['totalAmount'],
+                'address' => $address, // Assuming you have added this field to your orders table
+                'paymentMethod' => $paymentMethod // Assuming you have added this field to your orders table
+            ];
+
+            // Save the order using the OrderModel
+            $orderId = $this->orderModel->createOrder($orderData);
+
+            // Clear the cart after placing the order
+            if ($orderId) {
+                $this->cartModel->clearCart($orderData['userId']);
+                Helper::flashMessage("Order placed successfully!", "success");
+            } else {
+                Helper::flashMessage("Failed to place order.", "error");
+            }
+
+            // Redirect to a confirmation page or orders list
+            Helper::redirect(URLROOT . '/orders');
+        } else {
+            // If the method is not POST, redirect back to the address and payment page
+            Helper::redirect(URLROOT . '/order/addressPayment');
+        }
     }
 }
