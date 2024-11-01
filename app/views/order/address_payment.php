@@ -64,7 +64,7 @@
             </select>
         </div>
 
-        <button type="submit" class="btn btn-primary">Place Order</button>
+        <button type="submit" class="btn btn-primary">Confirm payment</button>
     </form>
 </div>
 
