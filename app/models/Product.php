@@ -23,14 +23,11 @@ class Product
     // Get a product by ID
     public function getProductById($id)
     {
-        $result = $this->db->select(
+        return $this->db->select(
             'products p LEFT JOIN categories c ON p.categoryId = c.id',
             'p.*, c.categoryName',
             'p.id = ' . (int)$id // Using direct integer conversion
-        );
-
-        // Return the first result (assuming it returns an array of results)
-        return isset($result[0]) ? $result[0] : null; // Return null if no product is found
+        )[0] ?? null; // Return the first result or null if not found
     }
 
 
