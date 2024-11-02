@@ -158,20 +158,15 @@
                 <label for="paymentMethod">Select a payment method:</label>
                 <select name="paymentMethod" id="paymentMethod" class="form-control" required>
                     <option value="">--Choose a payment method--</option>
-                    <option value="credit_card">Credit Card</option>
-                    <option value="debit_card">Debit Card</option>
-                    <option value="upi">UPI</option>
                     <option value="paypal">PayPal</option>
-                    <option value="bank_transfer">Bank Transfer</option>
                 </select>
             </div>
 
             <button type="submit" class="btn btn-primary">Proceed to payment</button>
+        </form><br>
+        <form action="<?php echo URLROOT; ?>/CartController" method="POST">
+            <button type="submit" class="btn btn-primary">GO back</button>
         </form>
-
-
-
-
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

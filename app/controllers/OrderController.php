@@ -61,7 +61,7 @@ class OrderController extends Controller
         // Clear the cart after successful order
         $this->orderModel->clearCart($userId);
 
-        // Redirect to the order success page
-        $this->view('order/success');
+        // Redirect to the paypal payment page
+        $this->view('paypal/index');
     }
 }
