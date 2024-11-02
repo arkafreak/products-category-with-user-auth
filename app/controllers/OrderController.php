@@ -44,6 +44,10 @@ class OrderController extends Controller
         }
 
         $userId = $_SESSION['user_id'];
+
+        // Validate and sanitize input data
+        $paymentMethod = htmlspecialchars($_POST['paymentMethod']); // Get the payment method from the form
+
         // Calculate total amount
         $cartItems = $this->cartModel->getCartItems($userId);
         $totalAmount = 0;
@@ -51,14 +55,11 @@ class OrderController extends Controller
             $totalAmount += $item->sellingPrice * $item->quantity;
         }
 
-        // Save the order to the database
-        $this->orderModel->createOrder($userId, $totalAmount);
+        // Save the order to the database with status "completed"
+        $this->orderModel->createOrder($userId, $totalAmount, 'completed', $paymentMethod);
 
         // Clear the cart after successful order
         $this->orderModel->clearCart($userId);
-
-        // Set a success message
-        //Helper::flashMessage('success', 'Order Successful!');
 
         // Redirect to the order success page
         $this->view('order/success');

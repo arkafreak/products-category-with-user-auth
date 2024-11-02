@@ -99,6 +99,11 @@
 
         <h5>Total Amount: ₹<?php echo htmlspecialchars($totalAmount); ?></h5>
 
+        <!-- Include a hidden input field to submit the total amount if needed -->
+        <input type="hidden" name="userId" value="<?php echo htmlspecialchars($userId); ?>">
+        <input type="hidden" name="totalAmount" value="<?php echo htmlspecialchars($totalAmount); ?>">
+
+
         <form action="<?php echo URLROOT; ?>/OrderController/confirm" method="POST">
             <div class="row">
                 <div class="col-md-6 form-group">
@@ -147,9 +152,6 @@
                     <label for="postalCode">Postal Code:</label>
                     <input type="text" name="postalCode" id="postalCode" class="form-control" required maxlength="6" pattern="\d{6}" title="Please enter a valid 6-digit postal code.">
                 </div>
-
-
-
             </div>
 
             <div class="form-group">
@@ -157,13 +159,16 @@
                 <select name="paymentMethod" id="paymentMethod" class="form-control" required>
                     <option value="">--Choose a payment method--</option>
                     <option value="credit_card">Credit Card</option>
-                    <option value="paypal">Debit Card</option>
-                    <option value="bank_transfer">UPI</option>
+                    <option value="debit_card">Debit Card</option>
+                    <option value="upi">UPI</option>
+                    <option value="paypal">PayPal</option>
+                    <option value="bank_transfer">Bank Transfer</option>
                 </select>
             </div>
 
-            <button type="submit" class="btn btn-primary">Confirm payment</button>
+            <button type="submit" class="btn btn-primary">Proceed to payment</button>
         </form>
+
 
 
 

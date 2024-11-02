@@ -9,11 +9,13 @@ class OrderModel
     }
 
     // Create a new order
-    public function createOrder($userId, $totalAmount)
-    {
+    public function createOrder($userId, $totalAmount, $orderStatus, $paymentMethod)
+    {   error_log("data is here: ". $userId ."". $totalAmount ."");
         $orderData = [
             'userId' => $userId,
-            'totalAmount' => $totalAmount
+            'totalAmount' => $totalAmount,
+            'orderStatus' => $orderStatus,
+            'paymentMethod' => $paymentMethod
         ];
         return $this->db->insert('orders', $orderData);
     }

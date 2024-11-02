@@ -23,7 +23,6 @@ class Database
             $this->dbh = new PDO($dsn, $this->user, $this->pass, $options);
         } catch (PDOException $e) {
             $this->error = $e->getMessage();
-            // Consider logging the error instead of echoing it
             throw new Exception("Database connection error: " . $this->error);
         }
     }
@@ -58,50 +57,45 @@ class Database
     public function execute()
     {
         try {
-            // Log the SQL statement for debugging
             error_log("Executing SQL: " . $this->stmt->queryString);
             return $this->stmt->execute();
         } catch (PDOException $e) {
-            // Log or display error message for debugging
             error_log("Database Query Error: " . $e->getMessage());
             throw new Exception("Error executing query: " . $e->getMessage());
         }
     }
 
-
     public function resultSet()
     {
         $this->execute();
-        return $this->stmt->fetchAll(PDO::FETCH_OBJ); // Fetch all results as objects
+        return $this->stmt->fetchAll(PDO::FETCH_OBJ);
     }
 
     public function single()
     {
         $this->execute();
-        return $this->stmt->fetch(PDO::FETCH_OBJ); // Fetch single result as an object
+        return $this->stmt->fetch(PDO::FETCH_OBJ);
     }
+
     public function fetchColumn()
     {
         $this->execute();
-        return $this->stmt->fetchColumn(); // Fetch single column
+        return $this->stmt->fetchColumn();
     }
 
     public function rowCount()
     {
-        return $this->stmt->rowCount(); // Return number of rows
+        return $this->stmt->rowCount();
     }
-
-    //Newly done formatting of the query functions 
-    //(currently being used to handel Categories table only)
 
     public function insert($table, $data)
     {
         $columns = implode(", ", array_keys($data));
-        $placeholders = implode(", ", array_map(fn($key) => ":$key", array_keys($data))); // Use named placeholders
+        $placeholders = implode(", ", array_map(fn($key) => ":$key", array_keys($data)));
         $this->query("INSERT INTO $table ($columns) VALUES ($placeholders)");
 
-        $this->bindParams($this->stmt, $data); // Pass the prepared statement and data
-        return $this->execute(); // Execute the statement
+        $this->bindParams($this->stmt, $data);
+        return $this->execute();
     }
 
     public function update($table, $data, $where)
@@ -109,29 +103,48 @@ class Database
         $set = implode(", ", array_map(fn($key) => "$key = :$key", array_keys($data)));
         $this->query("UPDATE $table SET $set WHERE $where");
 
-        $this->bindParams($this->stmt, $data); // Pass the prepared statement and data
-        return $this->execute(); // Execute the statement
+        $this->bindParams($this->stmt, $data);
+        return $this->execute();
     }
 
     public function delete($table, $where)
     {
         $this->query("DELETE FROM $table WHERE $where");
-        return $this->execute(); // Execute the statement
+        return $this->execute();
     }
-
 
     public function select($table, $columns = '*', $where = '')
     {
         $query = "SELECT $columns FROM $table" . ($where ? " WHERE $where" : "");
-        $this->query($query); // Use the query method to prepare the statement
-        return $this->resultSet(); // Fetch as objects
+        $this->query($query);
+        return $this->resultSet();
     }
-
 
     private function bindParams($stmt, $data)
     {
         foreach ($data as $key => $value) {
-            $stmt->bindValue(":$key", $value); // Bind parameters using PDO syntax
+            if (is_array($value)) {
+                throw new Exception("Invalid value for parameter $key: expected a string or scalar value, but received an array.");
+            }
+            $stmt->bindValue(":$key", $value);
         }
+    }
+
+    // Start a transaction
+    public function beginTransaction()
+    {
+        return $this->dbh->beginTransaction();
+    }
+
+    // Commit the transaction
+    public function commit()
+    {
+        return $this->dbh->commit();
+    }
+
+    // Rollback the transaction
+    public function rollBack()
+    {
+        return $this->dbh->rollBack();
     }
 }
