@@ -1,75 +1,177 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Address and Payment</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            margin-top: 30px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2,
+        h4,
+        h5 {
+            color: #333;
+        }
+
+        .table {
+            margin-top: 20px;
+        }
+
+        .table th {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+
+        .table td {
+            vertical-align: middle;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .form-group label {
+            font-weight: bold;
+        }
+
+        .form-control {
+            border-radius: 4px;
+            border: 1px solid #ced4da;
+        }
+
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+    </style>
 </head>
+
 <body>
-<div class="container">
-    <h2>Address and Payment</h2>
-
-    <?php if ($flash = Helper::getFlashMessage()): ?>
-        <div class="alert alert-<?php echo htmlspecialchars($flash['type']); ?>">
-            <?php echo htmlspecialchars($flash['message']); ?>
-        </div>
-    <?php endif; ?>
-
-    <h4>Order Details</h4>
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Product Name</th>
-                <th>Brand</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Total</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php if (!empty($cartItems)): ?>
-                <?php foreach ($cartItems as $item): ?>
-                    <tr>
-                        <td><?php echo htmlspecialchars($item->productName); ?></td>
-                        <td><?php echo htmlspecialchars($item->brand); ?></td>
-                        <td><?php echo htmlspecialchars($item->sellingPrice); ?></td>
-                        <td><?php echo htmlspecialchars($item->quantity); ?></td>
-                        <td><?php echo htmlspecialchars($item->sellingPrice * $item->quantity); ?></td>
-                    </tr>
-                <?php endforeach; ?>
-            <?php else: ?>
+    <div class="container">
+        <h2>Address and Payment</h2>
+        <h4>Order Details</h4>
+        <table class="table table-bordered">
+            <thead>
                 <tr>
-                    <td colspan="5">No items in cart.</td>
+                    <th>Product Name</th>
+                    <th>Brand</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
                 </tr>
-            <?php endif; ?>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                <?php if (!empty($cartItems)): ?>
+                    <?php foreach ($cartItems as $item): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($item->productName); ?></td>
+                            <td><?php echo htmlspecialchars($item->brand); ?></td>
+                            <td><?php echo htmlspecialchars($item->sellingPrice); ?></td>
+                            <td><?php echo htmlspecialchars($item->quantity); ?></td>
+                            <td><?php echo htmlspecialchars($item->sellingPrice * $item->quantity); ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="5">No items in cart.</td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
 
-    <h5>Total Amount: ₹<?php echo htmlspecialchars($totalAmount); ?></h5>
+        <h5>Total Amount: ₹<?php echo htmlspecialchars($totalAmount); ?></h5>
 
-    <form action="<?php echo URLROOT; ?>/order/confirm" method="POST">
-        <div class="form-group">
-            <label for="address">Enter your address:</label>
-            <textarea name="address" id="address" class="form-control" required></textarea>
-        </div>
+        <form action="<?php echo URLROOT; ?>/OrderController/confirm" method="POST">
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <label for="addressLine1">Address Line 1:</label>
+                    <input type="text" name="addressLine1" id="addressLine1" class="form-control" required>
+                </div>
+                <div class="col-md-6 form-group">
+                    <label for="addressLine2">Address Line 2:</label>
+                    <input type="text" name="addressLine2" id="addressLine2" class="form-control">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <label for="country">Country:</label>
+                    <select name="country" id="country" class="form-control" required>
+                        <option value="">--Select Country--</option>
+                        <option value="india">India</option>
+                        <option value="usa">USA</option>
+                        <option value="uk">UK</option>
+                        <!-- Add more countries as needed -->
+                    </select>
+                </div>
+                <div class="col-md-6 form-group">
+                    <label for="state">State:</label>
+                    <select name="state" id="state" class="form-control" required>
+                        <option value="">--Select State--</option>
+                        <option value="west_bengal">West Bengal</option>
+                        <option value="maharashtra">Maharashtra</option>
+                        <option value="delhi">Delhi</option>
+                        <!-- Add more states as needed -->
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <label for="city">City:</label>
+                    <select name="city" id="city" class="form-control" required>
+                        <option value="">--Select City--</option>
+                        <option value="kolkata">Kolkata</option>
+                        <option value="mumbai">Mumbai</option>
+                        <option value="delhi">Delhi</option>
+                        <!-- Add more cities as needed -->
+                    </select>
+                </div>
+                <div class="col-md-6 form-group">
+                    <label for="postalCode">Postal Code:</label>
+                    <input type="text" name="postalCode" id="postalCode" class="form-control" required maxlength="6" pattern="\d{6}" title="Please enter a valid 6-digit postal code.">
+                </div>
 
-        <div class="form-group">
-            <label for="paymentMethod">Select a payment method:</label>
-            <select name="paymentMethod" id="paymentMethod" class="form-control" required>
-                <option value="">--Choose a payment method--</option>
-                <option value="credit_card">Credit Card</option>
-                <option value="paypal">PayPal</option>
-                <option value="bank_transfer">Bank Transfer</option>
-            </select>
-        </div>
 
-        <button type="submit" class="btn btn-primary">Confirm payment</button>
-    </form>
-</div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+            </div>
+
+            <div class="form-group">
+                <label for="paymentMethod">Select a payment method:</label>
+                <select name="paymentMethod" id="paymentMethod" class="form-control" required>
+                    <option value="">--Choose a payment method--</option>
+                    <option value="credit_card">Credit Card</option>
+                    <option value="paypal">Debit Card</option>
+                    <option value="bank_transfer">UPI</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Confirm payment</button>
+        </form>
+
+
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>
