@@ -64,4 +64,9 @@ class OrderController extends Controller
         // Redirect to the paypal payment page
         $this->view('paypal/index');
     }
+
+    public function checkout()
+    {
+        $this->view('order/success');
+    }
 }
