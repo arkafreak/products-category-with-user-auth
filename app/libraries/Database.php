@@ -64,7 +64,12 @@ class Database
             throw new Exception("Error executing query: " . $e->getMessage());
         }
     }
-
+    // Prepare a statement
+    public function prepare($query)
+    {
+        $this->stmt = $this->dbh->prepare($query);
+        return $this->stmt;
+    }
     public function resultSet()
     {
         $this->execute();

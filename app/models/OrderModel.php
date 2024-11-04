@@ -11,15 +11,29 @@ class OrderModel
     // Create a new order
     public function createOrder($userId, $totalAmount, $orderStatus, $paymentMethod)
     {
-        error_log("data is here: " . $userId . "" . $totalAmount . "");
+        error_log("data is here: " . $userId . " " . $totalAmount . " " . $paymentMethod);
+
         $orderData = [
             'userId' => $userId,
             'totalAmount' => $totalAmount,
-            'orderStatus' => $orderStatus,
-            'paymentMethod' => $paymentMethod
+            'paymentMethod' => $paymentMethod,
+            'orderStatus' => $orderStatus
+            // 'orderStatus' is omitted; the database will use its default value
         ];
+
         return $this->db->insert('orders', $orderData);
     }
+
+    public function updateOrderStatus($orderId, $status)
+    {
+        $stmt = $this->db->prepare("UPDATE orders SET orderStatus = :status WHERE id = :orderId");
+        $stmt->bindParam(':status', $status);
+        $stmt->bindParam(':orderId', $orderId);
+
+        return $stmt->execute(); // Returns true on success
+    }
+
+
     public function updateOrder($orderId, $status)
     {
         $data = ['orderStatus' => $status];

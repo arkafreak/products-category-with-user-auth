@@ -56,7 +56,10 @@ class OrderController extends Controller
         }
 
         // Save the order to the database with status "completed"
-        $this->orderModel->createOrder($userId, $totalAmount, 'completed', $paymentMethod);
+        $orderId = $this->orderModel->createOrder($userId, $totalAmount, 'completed', $paymentMethod);
+
+        // Store the order ID in the session
+        $_SESSION['order_id'] = $orderId;
 
 
 
@@ -70,8 +73,14 @@ class OrderController extends Controller
             Helper::redirect(URLROOT . "/UserController/login");
         }
         $userId = $_SESSION['user_id'];
+        $orderId = $_SESSION['order_id'];
+
+        // Update the order status to 'completed'
+        $this->orderModel->updateOrderStatus($orderId, 'completed');
+
         // Clear the cart after successful order
         $this->orderModel->clearCart($userId);
+
         $this->view('order/success');
     }
 }
