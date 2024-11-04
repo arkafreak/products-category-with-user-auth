@@ -75,12 +75,32 @@ class OrderController extends Controller
         $userId = $_SESSION['user_id'];
         $orderId = $_SESSION['order_id'];
 
+        $totalAmount = $this->orderModel->getTotalAmountByOrderId($orderId);
         // Update the order status to 'completed'
         $this->orderModel->updateOrderStatus($orderId, 'completed');
 
         // Clear the cart after successful order
         $this->orderModel->clearCart($userId);
 
+
+        // Send email notification
+        $this->sendEmailNotification($totalAmount);
+        // echo "$totalAmount";
+        // // Send SMS notification
+        // $this->sendSMSNotification($userId, $totalAmount);
+
         $this->view('order/success');
+    }
+    private function sendEmailNotification($totalAmount)
+    {
+        echo "$totalAmount";
+        $to = 'dutta.arkapravo11@gmail.com';
+        $subject = "Order Confirmation";
+        $message = "Thank you for your order. Your payment of Rs. $totalAmount is successful.";
+        $headers = "From: freak.ghost11@gmail.com\r\n";
+
+        // Use PHP mail function
+        echo "mail($to, $subject, $message, $headers)";
+        
     }
 }

@@ -32,7 +32,18 @@ class OrderModel
 
         return $stmt->execute(); // Returns true on success
     }
+    public function getTotalAmountByOrderId($orderId)
+    {
+        $stmt = $this->db->prepare("SELECT totalAmount FROM orders WHERE id = :orderId");
+        $stmt->bindParam(':orderId', $orderId);
+        $stmt->execute();
 
+        // Fetch the result
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Return the total amount if found, otherwise return null
+        return $result ? $result['totalAmount'] : null;
+    }
 
     public function updateOrder($orderId, $status)
     {
@@ -45,5 +56,18 @@ class OrderModel
     public function clearCart($userId)
     {
         return $this->db->delete('cart', 'userId = ' . (int)$userId);
+    }
+
+    public function getUserEmailById($userId)
+    {
+        // SQL query to select the email of the user based on userId
+        $query = "SELECT email FROM users WHERE id = :userId";
+        $params = [':userId' => $userId];
+
+        // Use the `select` function from Database.php to fetch the email
+        $result = $this->db->select($query, $params);
+
+        // If email is found, return it; otherwise, return null
+        return $result ? $result[0]['email'] : null;
     }
 }
