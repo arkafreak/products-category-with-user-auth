@@ -66,6 +66,9 @@ class OrderController extends Controller
 
     public function checkout()
     {
+        if (!Helper::isLoggedIn()) {
+            Helper::redirect(URLROOT . "/UserController/login");
+        }
         $userId = $_SESSION['user_id'];
         // Clear the cart after successful order
         $this->orderModel->clearCart($userId);
