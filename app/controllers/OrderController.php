@@ -58,8 +58,7 @@ class OrderController extends Controller
         // Save the order to the database with status "completed"
         $this->orderModel->createOrder($userId, $totalAmount, 'completed', $paymentMethod);
 
-        // Clear the cart after successful order
-        $this->orderModel->clearCart($userId);
+
 
         // Redirect to the paypal payment page
         $this->view('paypal/index');
@@ -67,6 +66,9 @@ class OrderController extends Controller
 
     public function checkout()
     {
+        $userId = $_SESSION['user_id'];
+        // Clear the cart after successful order
+        $this->orderModel->clearCart($userId);
         $this->view('order/success');
     }
 }
