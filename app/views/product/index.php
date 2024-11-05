@@ -169,10 +169,6 @@
             <button type="submit" class="red-button">Logout</button>
         </form>
 
-        <!-- Order History page -->
-        <form action="<?php echo URLROOT; ?>/OrderController/history" method="POST" style="display: inline;">
-            <button type="submit" class="red-button">Your Order History</button>
-        </form>
     </div>
     <?php
     // Initialize the variable at the top of your view
@@ -248,6 +244,10 @@
     <br>
     <a href="<?php echo URLROOT; ?>/digital"><button>Digital Products</button></a>&nbsp;
     <a href="<?php echo URLROOT; ?>/physical"><button>Physical Products</button></a>&nbsp;
+    <!-- Order History page -->
+    <form action="<?php echo URLROOT; ?>/OrderController/history" method="POST" style="display: inline;">
+        <button type="submit" class="red-button">Your Order History</button>
+    </form>
 
     <script>
         function addToCart(event) {

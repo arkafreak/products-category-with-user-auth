@@ -1,49 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Order History</title>
-    <link rel="stylesheet" href="path/to/your/style.css">
 </head>
+
 <body>
     <h1>Your Order History</h1>
-    <?php if (!empty($data['orders'])): ?>
+    <?php if (!empty($data['orderHistory'])): ?>
         <table>
             <thead>
                 <tr>
-                    <th>Order ID</th>
+                    <th>Product Name</th>
+                    <th>Brand</th>
+                    <th>Original Price</th>
+                    <th>Selling Price</th>
+                    <th>Weight</th>
+                    <th>Order Date</th>
+                    <th>Payment Method</th>
                     <th>Total Amount</th>
-                    <th>Status</th>
-                    <th>Date</th>
-                    <th>Products</th>
+                    <th>Order Status</th>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($data['orders'] as $order): ?>
+                <?php foreach ($data['orderHistory'] as $order): ?>
                     <tr>
-                        <td><?php echo $order->id; ?></td>
-                        <td><?php echo $order->totalAmount; ?></td>
-                        <td><?php echo $order->orderStatus; ?></td>
-                        <td><?php echo $order->createdAt; ?></td>
-                        <td>
-                            <ul>
-                                <?php if (!empty($order->products)): ?>
-                                    <?php foreach ($order->products as $product): ?>
-                                        <li><?php echo $product->productName; ?> - <?php echo $product->brand; ?> - <?php echo $product->sellingPrice; ?></li>
-                                    <?php endforeach; ?>
-                                <?php else: ?>
-                                    <li>No products found for this order.</li>
-                                <?php endif; ?>
-                            </ul>
-                        </td>
+                        <td><?php echo htmlspecialchars($order['productName']); ?></td>
+                        <td><?php echo htmlspecialchars($order['brand']); ?></td>
+                        <td><?php echo htmlspecialchars($order['originalPrice']); ?></td>
+                        <td><?php echo htmlspecialchars($order['sellingPrice']); ?></td>
+                        <td><?php echo htmlspecialchars($order['weight']); ?></td>
+                        <td><?php echo htmlspecialchars($order['orderDate']); ?></td>
+                        <td><?php echo htmlspecialchars($order['paymentMethod']); ?></td>
+                        <td><?php echo htmlspecialchars($order['totalAmount']); ?></td>
+                        <td><?php echo htmlspecialchars($order['orderStatus']); ?></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
     <?php else: ?>
-        <p>No orders found.</p>
+        <p>You have no orders in your history.</p>
     <?php endif; ?>
     <a href="<?php echo URLROOT; ?>/Products/index">Back to products page</a>
 </body>
+
+
 </html>
