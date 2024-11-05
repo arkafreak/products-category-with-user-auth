@@ -31,21 +31,34 @@ class MailController extends Controller
     public function sendTransactionEmail($userEmail, $username, $orderId, $totalAmount, $paymentMethod)
     {
         // Prepare the transaction details message with external image links
-        $transactionDetails = "<p>Dear $username,</p>" .
+        $transactionDetails = "<p>Dear <strong>$username,</strong></p>" .
             "<p>Thank you for your order! We are pleased to inform you that your payment of Rs. $totalAmount has been processed successfully.</p>" .
             "<p>Here are the details of your order:</p>" .
             "<hr>" .
-            "<p><strong>Order ID:</strong> $orderId<br>" .
-            "<strong>Total Amount:</strong> Rs. $totalAmount<br>" .
-            "<strong>Status:</strong> Completed<br>" .
-            "<strong>Payment Method:</strong> $paymentMethod</p>" .
+
+            // Add the order details in a table with center-aligned values
+            "<table border='1' cellpadding='10' cellspacing='0' style='width: 100%; border-collapse: collapse;'>" .
+            "<tr>" .
+            "<th style='background-color: #f2f2f2; text-align: center;'>Order ID</th>" .
+            "<th style='background-color: #f2f2f2; text-align: center;'>Total Amount</th>" .
+            "<th style='background-color: #f2f2f2; text-align: center;'>Status</th>" .
+            "<th style='background-color: #f2f2f2; text-align: center;'>Payment Method</th>" .
+            "</tr>" .
+            "<tr>" .
+            "<td style='text-align: center;'>$orderId</td>" .
+            "<td style='text-align: center;'>Rs. $totalAmount</td>" .
+            "<td style='text-align: center;'>Completed</td>" .
+            "<td style='text-align: center;'>$paymentMethod</td>" .
+            "</tr>" .
+            "</table>" .
+
             "<p>You will receive an email confirmation shortly with more details regarding the shipping of your order.</p>" .
-            "<p>If you have any questions or need further assistance, feel free to contact us at <a href='mailto:support@freakproducts.com'>support@freakproducts.com</a>.</p>" .
+            "<p>If you have any questions or need further assistance, feel free to contact us at <a href='mailto:freak.ghost11@gmail.com'>support@freakproducts.com</a>.</p>" .
             "<p>Thank you for choosing Freak Products!</p>" .
-            "<p>Best Regards,<br><strong>The Freak Products Team</p>" .
+            "<p>Best Regards,<br><strong>The Freak Products Team</strong></p>" .
 
             // Add the PayPal Logo HTML after the payment method
-            '<table border="0" cellpadding="10" cellspacing="0">' .
+            '<table border="0" cellpadding="1" cellspacing="0">' .
             '<tr><td></td></tr>' .
             '<tr><td>' .
             '<a href="https://www.paypal.com/webapps/mpp/paypal-popup" title="How PayPal Works" onclick="javascript:window.open(\'https://www.paypal.com/webapps/mpp/paypal-popup\',\'WIPaypal\',\'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=1060, height=700\'); return false;">' .
@@ -53,6 +66,8 @@ class MailController extends Controller
             '</a>' .
             '</td></tr>' .
             '</table>';
+
+
 
         try {
             $this->mailer->addAddress($userEmail);
