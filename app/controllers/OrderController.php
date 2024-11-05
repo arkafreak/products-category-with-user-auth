@@ -1,8 +1,11 @@
 <?php
+
+
 class OrderController extends Controller
 {
     private $orderModel;
     private $cartModel;
+    private $mailController;
 
     public function __construct()
     {
@@ -14,6 +17,8 @@ class OrderController extends Controller
 
         $this->orderModel = $this->model('OrderModel');
         $this->cartModel = $this->model('CartModel');
+        // Instantiate MailController
+        $this->mailController = new MailController();
     }
 
     public function addressPayment()
@@ -72,35 +77,27 @@ class OrderController extends Controller
         if (!Helper::isLoggedIn()) {
             Helper::redirect(URLROOT . "/UserController/login");
         }
+
         $userId = $_SESSION['user_id'];
         $orderId = $_SESSION['order_id'];
-
+    
         $totalAmount = $this->orderModel->getTotalAmountByOrderId($orderId);
+
         // Update the order status to 'completed'
         $this->orderModel->updateOrderStatus($orderId, 'completed');
 
         // Clear the cart after successful order
         $this->orderModel->clearCart($userId);
 
+        // Retrieve the user's email
+        $userModel = $this->model('UserModel');
+        $userEmail = $userModel->getEmailById($userId);
+
+        $transactionDetails = "Order ID: $orderId\nTotal Amount: Rs. $totalAmount";
 
         // Send email notification
-        $this->sendEmailNotification($totalAmount);
-        // echo "$totalAmount";
-        // // Send SMS notification
-        // $this->sendSMSNotification($userId, $totalAmount);
-
+        $this->mailController->sendTransactionEmail($userEmail, $transactionDetails);
+        // $this->view( 'MailController/sendTransactionEmail'); // Change 'someAction' to the actual method you want to call
         $this->view('order/success');
-    }
-    private function sendEmailNotification($totalAmount)
-    {
-        echo "$totalAmount";
-        $to = 'dutta.arkapravo11@gmail.com';
-        $subject = "Order Confirmation";
-        $message = "Thank you for your order. Your payment of Rs. $totalAmount is successful.";
-        $headers = "From: freak.ghost11@gmail.com\r\n";
-
-        // Use PHP mail function
-        echo "mail($to, $subject, $message, $headers)";
-        
     }
 }

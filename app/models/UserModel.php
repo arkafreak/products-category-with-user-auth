@@ -35,4 +35,9 @@ class UserModel
         return $this->db->single(); // Fetch a single record
         // This should return an object or an associative array
     }
+    public function getEmailById($userId)
+    {
+        $result = $this->db->select('users', 'email', "id = $userId");
+        return $result ? $result[0]->email : null;
+    }
 }
