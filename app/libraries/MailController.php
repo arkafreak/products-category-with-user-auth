@@ -30,25 +30,40 @@ class MailController extends Controller
 
     public function sendTransactionEmail($userEmail, $username, $orderId, $totalAmount, $paymentMethod)
     {
-        // Prepare the transaction details message
-        $transactionDetails = "Dear $username,\n\n" .
-            "Thank you for your order! We are pleased to inform you that your payment of Rs. $totalAmount has been processed successfully.\n\n" .
-            "Here are the details of your order:\n" .
-            "------------------------------------\n" .
-            "Order ID: $orderId\n" .
-            "Total Amount: Rs. $totalAmount\n" .
-            "Status: Completed\n" .
-            "Payment Method: $paymentMethod\n\n" .
-            "You will receive an email confirmation shortly with more details regarding the shipping of your order.\n\n" .
-            "If you have any questions or need further assistance, feel free to contact us at support@freakproducts.com.\n\n" .
-            "Thank you for choosing Freak Products!\n\n" .
-            "Best Regards,\n" .
-            "The Freak Products Team";
+        // Prepare the transaction details message with external image links
+        $transactionDetails = "<p>Dear $username,</p>" .
+            "<p>Thank you for your order! We are pleased to inform you that your payment of Rs. $totalAmount has been processed successfully.</p>" .
+            "<p>Here are the details of your order:</p>" .
+            "<hr>" .
+            "<p><strong>Order ID:</strong> $orderId<br>" .
+            "<strong>Total Amount:</strong> Rs. $totalAmount<br>" .
+            "<strong>Status:</strong> Completed<br>" .
+            "<strong>Payment Method:</strong> $paymentMethod</p>" .
+            "<p>You will receive an email confirmation shortly with more details regarding the shipping of your order.</p>" .
+            "<p>If you have any questions or need further assistance, feel free to contact us at <a href='mailto:support@freakproducts.com'>support@freakproducts.com</a>.</p>" .
+            "<p>Thank you for choosing Freak Products!</p>" .
+            "<p>Best Regards,<br>The Freak Products Team</p>" .
+
+            // Add the PayPal Logo HTML after the payment method
+            '<table border="0" cellpadding="10" cellspacing="0" align="center">' .
+            '<tr><td align="center"></td></tr>' .
+            '<tr><td align="center">' .
+            '<a href="https://www.paypal.com/webapps/mpp/paypal-popup" title="How PayPal Works" onclick="javascript:window.open(\'https://www.paypal.com/webapps/mpp/paypal-popup\',\'WIPaypal\',\'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=1060, height=700\'); return false;">' .
+            '<img src="https://www.paypalobjects.com/webstatic/mktg/logo/AM_mc_vs_dc_ae.jpg" border="0" alt="PayPal Acceptance Mark">' .
+            '</a>' .
+            '</td></tr>' .
+            '</table>';
 
         try {
             $this->mailer->addAddress($userEmail);
             $this->mailer->Subject = 'Order Confirmation';
+
+            // Set the email format to HTML
+            $this->mailer->isHTML(true);
+
+            // Set the body of the email
             $this->mailer->Body = $transactionDetails;
+
             $this->mailer->send();
         } catch (Exception $e) {
             echo "Email could not be sent: {$this->mailer->ErrorInfo}";
