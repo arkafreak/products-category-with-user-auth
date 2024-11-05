@@ -32,17 +32,16 @@ class OrderModel
 
         return $stmt->execute(); // Returns true on success
     }
-    public function getTotalAmountByOrderId($orderId)
+    public function getTotalAmountByOrderId()
     {
-        $stmt = $this->db->prepare("SELECT totalAmount FROM orders WHERE id = :orderId");
-        $stmt->bindParam(':orderId', $orderId);
-        $stmt->execute();
+        $table = 'orders';
+        $columns = 'totalAmount';
+        $where = '1 ORDER BY id DESC LIMIT 1'; // Placeholder condition
 
-        // Fetch the result
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $result = $this->db->select($table, $columns, $where);
 
         // Return the total amount if found, otherwise return null
-        return $result ? $result['totalAmount'] : null;
+        return $result ? $result[0]->totalAmount : null;
     }
 
     public function updateOrder($orderId, $status)
