@@ -69,4 +69,24 @@ class OrderModel
         // If email is found, return it; otherwise, return null
         return $result ? $result[0]['email'] : null;
     }
+    public function getPaymentMethodByOrderId($orderId)
+    {
+        $result = $this->db->select('orders', 'paymentMethod', "id = $orderId");
+        return $result ? $result[0]->paymentMethod : null; // Assuming result is an array of objects
+    }
+    public function getLatestOrderIdByUserId($userId)
+    {
+        // Query to select the latest order ID for a specific user
+        $query = "SELECT MAX(id) AS latestOrderId FROM orders WHERE userId = :userId";
+
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':userId', $userId);
+        $stmt->execute();
+
+        // Fetch the result
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Return the latest order ID if found, otherwise return null
+        return $result ? $result['latestOrderId'] : null;
+    }
 }

@@ -60,8 +60,8 @@ class OrderController extends Controller
             $totalAmount += $item->sellingPrice * $item->quantity;
         }
 
-        // Save the order to the database with status "completed"
-        $orderId = $this->orderModel->createOrder($userId, $totalAmount, 'completed', $paymentMethod);
+        // Save the order to the database with status "pending"
+        $orderId = $this->orderModel->createOrder($userId, $totalAmount, 'pending', $paymentMethod);
 
         // Store the order ID in the session
         $_SESSION['order_id'] = $orderId;
@@ -79,9 +79,11 @@ class OrderController extends Controller
         }
 
         $userId = $_SESSION['user_id'];
-        $orderId = $_SESSION['order_id'];
-    
+        $orderId = $this->orderModel->getLatestOrderIdByUserId($userId);
+
         $totalAmount = $this->orderModel->getTotalAmountByOrderId($orderId);
+
+        $paymentMethod = $this->orderModel->getPaymentMethodByOrderId($orderId);
 
         // Update the order status to 'completed'
         $this->orderModel->updateOrderStatus($orderId, 'completed');
@@ -92,12 +94,11 @@ class OrderController extends Controller
         // Retrieve the user's email
         $userModel = $this->model('UserModel');
         $userEmail = $userModel->getEmailById($userId);
-
-        $transactionDetails = "Order ID: $orderId\nTotal Amount: Rs. $totalAmount";
-
+        $username = $userModel->getUserNameById($userId);
+        // echo "$orderId";
         // Send email notification
-        $this->mailController->sendTransactionEmail($userEmail, $transactionDetails);
-        // $this->view( 'MailController/sendTransactionEmail'); // Change 'someAction' to the actual method you want to call
+        $this->mailController->sendTransactionEmail($userEmail, $username, $orderId, $totalAmount, $paymentMethod);
+        
         $this->view('order/success');
     }
 }

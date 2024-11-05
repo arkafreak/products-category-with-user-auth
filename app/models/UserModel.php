@@ -40,4 +40,13 @@ class UserModel
         $result = $this->db->select('users', 'email', "id = $userId");
         return $result ? $result[0]->email : null;
     }
+
+    public function getUserNameById($userId)
+    {
+        // Use the select method from the Database class to get the user's name
+        $result = $this->db->select('users', 'name', "id = $userId");
+
+        // Return the name if found, otherwise return null
+        return $result ? $result[0]->name : null; // Adjust according to your result format
+    }
 }
