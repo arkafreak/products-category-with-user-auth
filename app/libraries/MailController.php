@@ -28,7 +28,7 @@ class MailController extends Controller
     }
 
 
-    public function sendTransactionEmail($userEmail, $username, $orderId, $totalAmount, $paymentMethod)
+    public function sendTransactionEmail($userEmail, $username, $orderId, $totalAmount, $paymentMethod, $selectedItems)
     {
         // Prepare the transaction details message with external image links
         $transactionDetails = "<p>Dear <strong>$username,</strong></p>" .
@@ -52,6 +52,27 @@ class MailController extends Controller
             "</tr>" .
             "</table>" .
 
+            // Add the order items details in a table
+            "<p><strong>Order Items:</strong></p>" .
+            "<table border='1' cellpadding='10' cellspacing='0' style='width: 100%; border-collapse: collapse;'>" .
+            "<tr>" .
+            "<th style='background-color: #f2f2f2; text-align: center;'>Product Name</th>" .
+            "<th style='background-color: #f2f2f2; text-align: center;'>Price</th>" .
+            "<th style='background-color: #f2f2f2; text-align: center;'>Quantity</th>" .
+            "</tr>";
+
+        // Loop through selected items and display them in the table
+        foreach ($selectedItems as $item) {
+            $transactionDetails .= "<tr>" .
+                "<td style='text-align: center;'>" . $item['productName'] . "</td>" .
+                "<td style='text-align: center;'>Rs. " . $item['sellingPrice'] . "</td>" .
+                "<td style='text-align: center;'>" . $item['quantity'] . "</td>" .
+                "</tr>";
+        }
+
+        // Close the order items table
+        $transactionDetails .= "</table>" .
+
             "<p>You will receive an email confirmation shortly with more details regarding the shipping of your order.</p>" .
             "<p>If you have any questions or need further assistance, feel free to contact us at <a href='mailto:freak.ghost11@gmail.com'>support@freakproducts.com</a>.</p>" .
             "<p>Thank you for choosing Freak Products!</p>" .
@@ -67,8 +88,7 @@ class MailController extends Controller
             '</td></tr>' .
             '</table>';
 
-
-
+        // Send email using your mailer object
         try {
             $this->mailer->addAddress($userEmail);
             $this->mailer->Subject = 'Order Confirmation';
@@ -79,6 +99,7 @@ class MailController extends Controller
             // Set the body of the email
             $this->mailer->Body = $transactionDetails;
 
+            // Send the email
             $this->mailer->send();
         } catch (Exception $e) {
             echo "Email could not be sent: {$this->mailer->ErrorInfo}";

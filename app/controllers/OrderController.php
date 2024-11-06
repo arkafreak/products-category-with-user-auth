@@ -63,13 +63,18 @@ class OrderController extends Controller
         // Save the order to the database with status "pending"
         $orderId = $this->orderModel->createOrder($userId, $totalAmount, 'pending', $paymentMethod);
 
-        // Store the order ID in the session
-        $_SESSION['order_id'] = $orderId;
+        $orderId = $this->orderModel->getLatestOrderIdByUserId($userId);
 
-
-
-        // Redirect to the paypal payment page
-        $this->view('paypal/index');
+        // echo "$orderId";
+        // Redirect to the payment page based on selected method
+        if ($paymentMethod === 'paypal') {
+            $this->view('paypal/index');
+        } elseif ($paymentMethod === 'stripe') {
+            $this->view('stripe/index', ['orderId' => $orderId, 'totalAmount' => $totalAmount]);
+        } else {
+            // Handle invalid payment methods if necessary
+            echo "Invalid payment method selected.";
+        }
     }
 
     public function checkout()
@@ -79,6 +84,25 @@ class OrderController extends Controller
         }
 
         $userId = $_SESSION['user_id'];
+
+        $cartItems = $this->cartModel->getCartItems($userId);
+
+        // foreach ($cartItems as $item) {
+        //     echo "Product Name: " . $item->productName . "<br>";
+        //     echo "Selling Price: " . $item->sellingPrice . "<br>";
+        //     echo "Quantity: " . $item->quantity . "<br><br>";
+        // }
+        $selectedItems = [];
+
+        foreach ($cartItems as $item) {
+            // Add only productName, sellingPrice, and quantity to the new array
+            $selectedItems[] = [
+                'productName' => $item->productName,
+                'sellingPrice' => $item->sellingPrice,
+                'quantity' => $item->quantity
+            ];
+        }
+
         $orderId = $this->orderModel->getLatestOrderIdByUserId($userId);
 
         $totalAmount = $this->orderModel->getTotalAmountByOrderId($orderId);
@@ -95,10 +119,11 @@ class OrderController extends Controller
         $userModel = $this->model('UserModel');
         $userEmail = $userModel->getEmailById($userId);
         $username = $userModel->getUserNameById($userId);
-        // echo "$orderId";
-        // Send email notification
-        $this->mailController->sendTransactionEmail($userEmail, $username, $orderId, $totalAmount, $paymentMethod);
         
+        // Send email notification
+
+        $this->mailController->sendTransactionEmail($userEmail, $username, $orderId, $totalAmount, $paymentMethod, $selectedItems);
+
         $this->view('order/success');
     }
 }
