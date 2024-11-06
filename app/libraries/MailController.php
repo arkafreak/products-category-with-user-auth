@@ -76,17 +76,28 @@ class MailController extends Controller
             "<p>You will receive an email confirmation shortly with more details regarding the shipping of your order.</p>" .
             "<p>If you have any questions or need further assistance, feel free to contact us at <a href='mailto:freak.ghost11@gmail.com'>support@freakproducts.com</a>.</p>" .
             "<p>Thank you for choosing Freak Products!</p>" .
-            "<p>Best Regards,<br><strong>The Freak Products Team</strong></p>" .
+            "<p>Best Regards,<br><strong>The Freak Products Team</strong></p>";
 
-            // Add the PayPal Logo HTML after the payment method
-            '<table border="0" cellpadding="1" cellspacing="0">' .
-            '<tr><td></td></tr>' .
-            '<tr><td>' .
-            '<a href="https://www.paypal.com/webapps/mpp/paypal-popup" title="How PayPal Works" onclick="javascript:window.open(\'https://www.paypal.com/webapps/mpp/paypal-popup\',\'WIPaypal\',\'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=1060, height=700\'); return false;">' .
-            '<img src="https://www.paypalobjects.com/webstatic/mktg/logo/AM_mc_vs_dc_ae.jpg" border="0" alt="PayPal Acceptance Mark">' .
-            '</a>' .
-            '</td></tr>' .
-            '</table>';
+        // Add payment method logo
+        if ($paymentMethod == 'paypal') {
+            $transactionDetails .=
+                '<table border="0" cellpadding="1" cellspacing="0">' .
+                '<tr><td></td></tr>' .
+                '<tr><td>' .
+                '<a href="https://www.paypal.com/webapps/mpp/paypal-popup" title="How PayPal Works" onclick="javascript:window.open(\'https://www.paypal.com/webapps/mpp/paypal-popup\',\'WIPaypal\',\'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=1060, height=700\'); return false;">' .
+                '<img src="https://www.paypalobjects.com/webstatic/mktg/logo/AM_mc_vs_dc_ae.jpg" border="0" alt="PayPal Acceptance Mark">' .
+                '</a>' .
+                '</td></tr>' .
+                '</table>';
+        } elseif ($paymentMethod == 'stripe') {
+            $transactionDetails .=
+                '<table border="0" cellpadding="1" cellspacing="0">' .
+                '<tr><td></td></tr>' .
+                '<tr><td>' .
+                '<img src="https://media.designrush.com/inspiration_images/656402/conversions/3-desktop.jpg" alt="Stripe Logo" style="width: 100%; height: auto; object-fit: cover;">' .
+                '</td></tr>' .
+                '</table>';
+        }
 
         // Send email using your mailer object
         try {
