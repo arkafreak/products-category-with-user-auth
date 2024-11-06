@@ -6,6 +6,7 @@ class OrderController extends Controller
     private $orderModel;
     private $cartModel;
     private $mailController;
+    private $stripeServices;
 
     public function __construct()
     {
@@ -19,6 +20,7 @@ class OrderController extends Controller
         $this->cartModel = $this->model('CartModel');
         // Instantiate MailController
         $this->mailController = new MailController();
+        $this->stripeServices = new StripeService();
     }
 
     public function addressPayment()
@@ -70,7 +72,15 @@ class OrderController extends Controller
         if ($paymentMethod === 'paypal') {
             $this->view('paypal/index');
         } elseif ($paymentMethod === 'stripe') {
-            $this->view('stripe/index', ['orderId' => $orderId, 'totalAmount' => $totalAmount]);
+            // Create a Stripe Checkout session
+            $checkoutURL = $this->stripeServices->createCheckoutSession($cartItems, $userId);
+            if ($checkoutURL) {
+                // Redirect to Stripe Checkout page
+                header("Location: " . $checkoutURL);
+                exit();
+            } else {
+                //
+            }
         } else {
             // Handle invalid payment methods if necessary
             echo "Invalid payment method selected.";
@@ -86,12 +96,6 @@ class OrderController extends Controller
         $userId = $_SESSION['user_id'];
 
         $cartItems = $this->cartModel->getCartItems($userId);
-
-        // foreach ($cartItems as $item) {
-        //     echo "Product Name: " . $item->productName . "<br>";
-        //     echo "Selling Price: " . $item->sellingPrice . "<br>";
-        //     echo "Quantity: " . $item->quantity . "<br><br>";
-        // }
         $selectedItems = [];
 
         foreach ($cartItems as $item) {
@@ -119,7 +123,7 @@ class OrderController extends Controller
         $userModel = $this->model('UserModel');
         $userEmail = $userModel->getEmailById($userId);
         $username = $userModel->getUserNameById($userId);
-        
+
         // Send email notification
 
         $this->mailController->sendTransactionEmail($userEmail, $username, $orderId, $totalAmount, $paymentMethod, $selectedItems);
