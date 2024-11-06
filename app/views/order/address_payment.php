@@ -159,6 +159,7 @@
                 <select name="paymentMethod" id="paymentMethod" class="form-control" required>
                     <option value="">--Choose a payment method--</option>
                     <option value="paypal">PayPal</option>
+                    <option value="stripe">Stripe</option>
                 </select>
             </div>
 
