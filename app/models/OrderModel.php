@@ -92,12 +92,13 @@ class OrderModel
 
     public function getAllPurchasedProducts()
     {
+        // Query to fetch products ordered by createdAt timestamp (grouped by date and time)
         $query = "SELECT p.id, p.productName, p.brand, oi.quantity, o.createdAt AS purchase_date
                   FROM order_items oi
                   JOIN products p ON oi.productId = p.id
                   JOIN orders o ON oi.orderId = o.id
                   WHERE o.orderStatus = 'completed'
-                  ORDER BY o.createdAt DESC, p.productName";
+                  ORDER BY o.createdAt DESC";
 
         $this->db->query($query);
         return $this->db->resultSet();
