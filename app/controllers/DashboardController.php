@@ -9,7 +9,7 @@ class DashboardController extends Controller
     {
         Helper::startSession();
         if (!Helper::isLoggedIn() || $_SESSION['role'] !== 'admin') {
-            Helper::redirect(URLROOT . "UserController/login");
+            Helper::redirect(URLROOT . "/UserController/login");
         }
 
         // Load the OrderModel
