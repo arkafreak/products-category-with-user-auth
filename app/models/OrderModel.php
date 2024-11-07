@@ -119,4 +119,16 @@ class OrderModel
         $this->db->query($query);
         return $this->db->resultSet(); // Fetch all results
     }
+   public function getRevenueOverTime()
+    {
+        // Query to calculate daily revenue
+        $query = "SELECT DATE(createdAt) AS date, SUM(totalAmount) AS revenue
+                  FROM orders
+                  WHERE orderStatus = 'completed'
+                  GROUP BY DATE(createdAt)
+                  ORDER BY DATE(createdAt) DESC";
+        
+        $this->db->query($query);
+        return $this->db->resultSet();  // Return the result
+    }
 }

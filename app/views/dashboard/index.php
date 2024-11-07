@@ -162,6 +162,45 @@
         });
     </script>
 
+    <h3>Revenue Over Time</h3>
+    <canvas id="revenueChart" width="400" height="200"></canvas>
+
+    <script>
+        // Prepare the data for the line chart
+        var revenueData = <?php echo json_encode($data['revenueData']); ?>;
+        var labels = [];
+        var data = [];
+
+        revenueData.forEach(function(item) {
+            labels.push(item.date); // X-axis: Date
+            data.push(item.total_revenue); // Y-axis: Total Revenue
+        });
+
+        // Create the line chart
+        var ctx2 = document.getElementById('revenueChart').getContext('2d');
+        var revenueChart = new Chart(ctx2, {
+            type: 'line',
+            data: {
+                labels: labels, // Dates on the X-axis
+                datasets: [{
+                    label: 'Total Revenue',
+                    data: data, // Revenue data
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+
     <br>
     <a href="<?php echo URLROOT; ?>/Products/index">
         <button>Go back</button>

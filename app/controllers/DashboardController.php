@@ -20,14 +20,18 @@ class DashboardController extends Controller
     {
         // Fetch all purchased products with date and time
         $purchasedProducts = $this->orderModel->getAllPurchasedProducts();
-
+        
         // Group products by date and time
         $groupedProducts = $this->groupProductsByDate($purchasedProducts);
         // Fetch sales by payment method data
         $salesData = $this->orderModel->getSalesByPaymentMethod();
+        // Fetch the total revewnue over time
+        $revenueData = $this->orderModel->getRevenueOverTime();
+
         $this->view('dashboard/index', [
             'groupedProducts' => $groupedProducts,
-            'salesData' => $salesData
+            'salesData' => $salesData,
+            'revenueData' => $revenueData
         ]);
     }
 
