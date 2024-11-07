@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
         /* Global Styles */
@@ -97,6 +98,11 @@
                 font-size: 18px;
             }
         }
+
+        canvas {
+            max-width: 800px;
+            margin: 20px auto;
+        }
     </style>
 </head>
 
@@ -127,6 +133,34 @@
             </tbody>
         </table>
     <?php endforeach; ?>
+    <h2>Sales by Payment Method</h2>
+    <canvas id="paymentMethodChart" width="400" height="200"></canvas>
+
+    <script>
+        // Prepare the data for the pie chart
+        var paymentMethods = <?php echo json_encode($data['salesData']); ?>;
+        var labels = [];
+        var data = [];
+        paymentMethods.forEach(function(item) {
+            labels.push(item.paymentMethod);
+            data.push(item.total_sales);
+        });
+
+        // Create the pie chart
+        var ctx = document.getElementById('paymentMethodChart').getContext('2d');
+        var paymentMethodChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Sales by Payment Method',
+                    data: data,
+                    backgroundColor: ['#ff6384', '#36a2eb', '#ffcd56', '#4bc0c0'],
+                    hoverOffset: 4
+                }]
+            }
+        });
+    </script>
 
     <br>
     <a href="<?php echo URLROOT; ?>/Products/index">

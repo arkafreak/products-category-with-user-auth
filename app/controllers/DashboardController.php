@@ -1,32 +1,39 @@
 <?php
 
-class DashboardController extends Controller {
+class DashboardController extends Controller
+{
 
     private $orderModel;
 
-    public function __construct() {
+    public function __construct()
+    {
         Helper::startSession();
         if (!Helper::isLoggedIn() || $_SESSION['role'] !== 'admin') {
             Helper::redirect(URLROOT . "UserController/login");
         }
-        
+
         // Load the OrderModel
         $this->orderModel = $this->model('OrderModel');
     }
 
-    public function index() {
+    public function index()
+    {
         // Fetch all purchased products with date and time
         $purchasedProducts = $this->orderModel->getAllPurchasedProducts();
-        
+
         // Group products by date and time
         $groupedProducts = $this->groupProductsByDate($purchasedProducts);
-
-        // Load the dashboard view with the grouped data
-        $this->view('dashboard/index', ['groupedProducts' => $groupedProducts]);
+        // Fetch sales by payment method data
+        $salesData = $this->orderModel->getSalesByPaymentMethod();
+        $this->view('dashboard/index', [
+            'groupedProducts' => $groupedProducts,
+            'salesData' => $salesData
+        ]);
     }
 
     // Function to group products by purchase date and time
-    private function groupProductsByDate($products) {
+    private function groupProductsByDate($products)
+    {
         $grouped = [];
         foreach ($products as $product) {
             // Format the date and time

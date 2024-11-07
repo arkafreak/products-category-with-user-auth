@@ -103,4 +103,20 @@ class OrderModel
         $this->db->query($query);
         return $this->db->resultSet();
     }
+
+    // Inside your DashboardController (or relevant controller)
+    public function getSalesByPaymentMethod()
+    {
+        // Query to fetch sales grouped by payment method
+        $query = "
+            SELECT paymentMethod, SUM(totalAmount) AS total_sales
+            FROM orders
+            WHERE orderStatus = 'completed'
+            GROUP BY paymentMethod
+        ";
+
+        // Execute the query
+        $this->db->query($query);
+        return $this->db->resultSet(); // Fetch all results
+    }
 }
