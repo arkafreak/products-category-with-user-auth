@@ -152,6 +152,8 @@
         <div class="button-group">
             <?php if ($_SESSION['role'] === 'admin'): ?>
                 <a href="<?php echo URLROOT; ?>/products/add"><button>Add New Product</button></a>
+                <!-- adding a new button for dashboard -->
+                <a href="<?php echo URLROOT; ?>/DashboardController/index"><button>Dashboard</button></a>
             <?php endif; ?>
             <a href="<?php echo URLROOT; ?>/categories"><button>Go to categories</button></a>
             <a href="<?php echo URLROOT; ?>/choose/options"><button>Home</button></a>

@@ -56,24 +56,12 @@ class OrderModel
     {
         return $this->db->delete('cart', 'userId = ' . (int)$userId);
     }
-
-    public function getUserEmailById($userId)
-    {
-        // SQL query to select the email of the user based on userId
-        $query = "SELECT email FROM users WHERE id = :userId";
-        $params = [':userId' => $userId];
-
-        // Use the `select` function from Database.php to fetch the email
-        $result = $this->db->select($query, $params);
-
-        // If email is found, return it; otherwise, return null
-        return $result ? $result[0]['email'] : null;
-    }
     public function getPaymentMethodByOrderId($orderId)
     {
         $result = $this->db->select('orders', 'paymentMethod', "id = $orderId");
         return $result ? $result[0]->paymentMethod : null; // Assuming result is an array of objects
     }
+
     public function getLatestOrderIdByUserId($userId)
     {
         // Query to select the latest order ID for a specific user
@@ -88,5 +76,30 @@ class OrderModel
 
         // Return the latest order ID if found, otherwise return null
         return $result ? $result['latestOrderId'] : null;
+    }
+
+
+    //Part for order_items table!
+    public function addOrderItem($orderId, $productId, $quantity)
+    {
+        $query = "INSERT INTO order_items (orderId, productId, quantity) VALUES (:orderId, :productId, :quantity)";
+        $this->db->query($query);
+        $this->db->bind(':orderId', $orderId);
+        $this->db->bind(':productId', $productId);
+        $this->db->bind(':quantity', $quantity);
+        $this->db->execute();
+    }
+
+    public function getAllPurchasedProducts()
+    {
+        $query = "SELECT p.id, p.productName, p.brand, oi.quantity, o.createdAt AS purchase_date
+                  FROM order_items oi
+                  JOIN products p ON oi.productId = p.id
+                  JOIN orders o ON oi.orderId = o.id
+                  WHERE o.orderStatus = 'completed'
+                  ORDER BY o.createdAt DESC, p.productName";
+
+        $this->db->query($query);
+        return $this->db->resultSet();
     }
 }

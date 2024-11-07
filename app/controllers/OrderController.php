@@ -107,6 +107,8 @@ class OrderController extends Controller
             ];
         }
 
+
+
         $orderId = $this->orderModel->getLatestOrderIdByUserId($userId);
 
         $totalAmount = $this->orderModel->getTotalAmountByOrderId($orderId);
@@ -115,6 +117,11 @@ class OrderController extends Controller
 
         // Update the order status to 'completed'
         $this->orderModel->updateOrderStatus($orderId, 'completed');
+
+        //adding order items for showing in the admin dashboard
+        foreach ($cartItems as $item) {
+            $this->orderModel->addOrderItem($orderId, $item->id, $item->quantity);
+        }
 
         // Clear the cart after successful order
         $this->orderModel->clearCart($userId);
