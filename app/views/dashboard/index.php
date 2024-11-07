@@ -97,11 +97,39 @@
                 width: 100%;
                 font-size: 18px;
             }
+
+            .chart-container {
+                flex-direction: column;
+                /* Stack charts vertically on small screens */
+            }
+
+            canvas {
+                width: 100%;
+                height: auto;
+                /* Ensure the charts are responsive */
+            }
         }
 
-        canvas {
-            max-width: 800px;
+        .chart-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
             margin: 20px auto;
+            max-width: 700px;
+            /* Limit max width */
+            align-items: center;
+            margin-top: 10px;
+            /* Ensure both items are aligned centrally along the cross axis */
+        }
+
+        /* Uniform canvas sizing for both chart and graph */
+        canvas {
+            flex: 1;
+            /* Makes each canvas take equal available space */
+            height: 300px;
+            /* Set fixed height for both charts */
+            max-width: 48%;
+            /* Ensure both charts take up equal space, avoid stretching */
         }
     </style>
 </head>
@@ -109,7 +137,9 @@
 <body>
     <h1>Admin Dashboard</h1>
     <h2>Purchased Products Grouped by Date & Time</h2>
-
+    <a href="<?php echo URLROOT; ?>/Products/index">
+        <button>Go back</button>
+    </a>
     <?php foreach ($data['groupedProducts'] as $dateTime => $products): ?>
         <h3><?php echo htmlspecialchars($dateTime); ?></h3>
         <table>
@@ -133,8 +163,15 @@
             </tbody>
         </table>
     <?php endforeach; ?>
-    <h2>Sales by Payment Method</h2>
-    <canvas id="paymentMethodChart" width="400" height="200"></canvas>
+    <h2>Sales by Payment Method, and Total revenue on the basis of Date</h2>
+
+    <div class="chart-container">
+        <!-- Pie chart for sales by payment method -->
+        <canvas id="paymentMethodChart"></canvas>
+
+        <!-- Line chart for revenue over time -->
+        <canvas id="revenueChart"></canvas>
+    </div>
 
     <script>
         // Prepare the data for the pie chart
@@ -160,21 +197,15 @@
                 }]
             }
         });
-    </script>
 
-    <h3>Revenue Over Time</h3>
-    <canvas id="revenueChart" width="400" height="200"></canvas>
-
-    <script>
-        // Prepare the data for the line chart
         // Prepare the data for the line chart
         var revenueData = <?php echo json_encode($data['revenueData']); ?>;
-        var labels = [];
-        var data = [];
+        var labels2 = [];
+        var data2 = [];
 
         revenueData.forEach(function(item) {
-            labels.push(item.date); // X-axis: Date
-            data.push(parseFloat(item.revenue)); // Y-axis: Total Revenue, convert to number
+            labels2.push(item.date); // X-axis: Date
+            data2.push(parseFloat(item.revenue)); // Y-axis: Revenue, convert to number
         });
 
         // Create the line chart
@@ -182,10 +213,10 @@
         var revenueChart = new Chart(ctx2, {
             type: 'line',
             data: {
-                labels: labels, // Dates on the X-axis
+                labels: labels2, // Dates on the X-axis
                 datasets: [{
                     label: 'Total Revenue',
-                    data: data, // Revenue data (now as numbers)
+                    data: data2, // Revenue data (now as numbers)
                     borderColor: 'rgba(75, 192, 192, 1)',
                     backgroundColor: 'rgba(75, 192, 192, 0.2)',
                     fill: true
