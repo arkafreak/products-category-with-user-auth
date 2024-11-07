@@ -167,13 +167,14 @@
 
     <script>
         // Prepare the data for the line chart
+        // Prepare the data for the line chart
         var revenueData = <?php echo json_encode($data['revenueData']); ?>;
         var labels = [];
         var data = [];
 
         revenueData.forEach(function(item) {
             labels.push(item.date); // X-axis: Date
-            data.push(item.total_revenue); // Y-axis: Total Revenue
+            data.push(parseFloat(item.revenue)); // Y-axis: Total Revenue, convert to number
         });
 
         // Create the line chart
@@ -184,7 +185,7 @@
                 labels: labels, // Dates on the X-axis
                 datasets: [{
                     label: 'Total Revenue',
-                    data: data, // Revenue data
+                    data: data, // Revenue data (now as numbers)
                     borderColor: 'rgba(75, 192, 192, 1)',
                     backgroundColor: 'rgba(75, 192, 192, 0.2)',
                     fill: true
