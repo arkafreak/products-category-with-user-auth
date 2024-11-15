@@ -1,0 +1,235 @@
+/* General Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #385a5b, #14201e);
+    overflow: hidden;
+    /* Prevents scrolling */
+}
+
+.container {
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    height: 80%;
+    border-radius: 200px;
+    overflow: hidden;
+
+    
+    /* Shadow effect */
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.7); /* Apply a soft shadow */
+}
+/* Right side with content */
+.content-container {
+    flex: 1;
+    background-color: white;
+    background-image: url('../images/background.jpg');
+    width: 100%;
+    background-size: cover;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+
+h1 {
+    color: #fff;
+    font-size: 2.5em;
+    margin-bottom: 20px;
+}
+
+/* Logout Message Styles */
+.message {
+    display: inline-block;
+    background-color: rgba(0, 255, 0, 0.1);
+    color: #28a745;
+    border: 1px solid #28a745;
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 1.2em;
+    font-weight: 600;
+    margin-bottom: 20px;
+    max-width: 400px;
+    width: 100%;
+    animation: fadeInOut 3s ease-out;
+}
+
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    20% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    80% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+}
+
+/* User Actions Section */
+.options {
+    margin-top: 30px;
+    width: 80%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    justify-content: center;
+}
+
+.options h2 {
+    color: rgb(255, 255, 255);
+    font-size: 1.8em;
+    margin-bottom: 15px;
+}
+
+/* Button Styles */
+button {
+    padding: 12px 25px;
+    background-color: green;
+    color: rgb(255, 255, 255);
+    font-weight: bolder;
+    background: linear-gradient(135deg, #090a09, #121414);
+    box-shadow: 2px 4px 10px 2px rgba(0, 0, 0, 0.6);
+
+    border: black;
+    border-radius: 30px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.3s ease;
+    width: 100%;
+    max-width: 250px;
+    margin: 0 auto;
+}
+
+button:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+
+    /* Medium screens like tablets */
+    .container {
+        flex-direction: column;
+        display: flex;
+        width: 100%;
+        max-width: 1200px;
+        height: 80%;
+        border-radius: 200px;
+        overflow: hidden;
+    }
+
+    .image-container {
+        height: 250px;
+        width: 100%;
+    }
+
+    .content-container {
+        padding: 20px;
+        width: 100%;
+    }
+
+    button {
+        padding: 12px 25px;
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+
+    /* Small screens like mobile */
+    .container {
+        flex-direction: column;
+        height: 90%;
+        /* More vertical space for content */
+    }
+
+    .image-container {
+        height: 200px;
+        width: 100%;
+    }
+
+    .content-container {
+        padding: 15px;
+        width: 100%;
+    }
+
+    h1 {
+        font-size: 2em;
+    }
+
+    .message {
+        font-size: 1.1em;
+        padding: 12px;
+    }
+
+    .options h2 {
+        font-size: 1.5em;
+    }
+
+    button {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    /* Very small screens like phones in portrait mode */
+    .container {
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .image-container {
+        height: 150px;
+        /* Smaller image on mobile */
+    }
+
+    .content-container {
+        padding: 10px;
+        width: 100%;
+    }
+
+    h1 {
+        font-size: 1.5em;
+    }
+
+    .message {
+        font-size: 1em;
+        padding: 10px;
+    }
+
+    .options h2 {
+        font-size: 1.3em;
+    }
+
+    button {
+        font-size: 13px;
+    }
+}

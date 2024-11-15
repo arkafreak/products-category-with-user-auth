@@ -124,6 +124,7 @@
             <td><?php echo htmlspecialchars($data['sellingPrice']); ?></td>
             <td><?php echo htmlspecialchars($data['weight']); ?></td>
             <td><?php echo htmlspecialchars($data['categoryName']); ?></td>
+
         </tr>
     </table>
 
